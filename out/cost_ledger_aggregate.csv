@@ -1,0 +1,6 @@
+group,n_reviewers,n_cases_affected,n_cases_made_worse,n_cases_made_better,net_wrong_added,n_practice_reps,skill_gain_units,exam_acc_gain_per_reviewer,n_under_reliance_fixed
+OVER / HIGH,16,4335,891.6,202.6,688.9,3141.6,10.3049,0.0681,95.0
+UNDER / HIGH,6,0,0.0,143.0,-143.0,0.0,0.0,0.0,143.0
+UNDER / LOW,3,0,0.0,39.0,-39.0,0.0,0.0,0.0,39.0
+WATCH / MEDIUM,35,853,173.8,54.5,119.2,770.5,2.5281,0.0076,523.0
+TOTAL,60,5188,1065.4,439.1,626.1,3912.1,12.833,0.0226,800.0

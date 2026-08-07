@@ -1,0 +1,3 @@
+policy_group,n_reviewers,mean_capability_change_wk1_4_to_wk21_24,median_capability_change
+intervened (over_reliance_risk + watch),26,-0.3156,-0.3305
+non_intervened (under_reliant + healthy),34,0.0102,0.0059

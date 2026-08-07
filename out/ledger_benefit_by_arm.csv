@@ -1,0 +1,5 @@
+arm,n_reviewers,mean_capability_slope_per_week,mean_capability_change_wk1_4_to_wk21_24,median_capability_change
+blind_first,15,-0.00088,-0.0178,0.0279
+control_always_ai,15,-0.01351,-0.2681,-0.3192
+disagreement_prompt,15,-0.00318,-0.063,-0.0767
+withheld_ai,15,-0.00875,-0.1749,-0.241

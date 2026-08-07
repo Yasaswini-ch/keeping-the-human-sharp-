@@ -1,0 +1,209 @@
+==============================================================================
+  B.3 COST LEDGER — Plain-Language Account of the Trade-Off
+  PS-I5  |  Week-24 simulation against 36,000-event log
+==============================================================================
+
+THE FUNDAMENTAL TRADE
+─────────────────────
+Withholding or challenging AI assistance has a real, immediate accuracy cost.
+A reviewer who would have deferred to the AI (correctly) and instead must
+judge independently will get some of those cases wrong. This is not a modelling
+artefact — it is directly visible in the data: the withheld_ai arm, where AI
+was removed from ~12% of cases, shows assisted accuracy of 0.841 vs. 0.866–
+0.873 in the other arms, a gap of roughly 2.5–3 percentage points.
+
+The question the ledger forces is: how many cases are made worse, and what is
+received in exchange?
+
+──────────────────────────────────────────────────────────────────────────────
+COST SIDE — Cases Made Worse by the Intervention
+──────────────────────────────────────────────────────────────────────────────
+
+Across all 60 reviewers simulated over the full 24-week event log:
+
+  Total cases affected by intervention (AI withheld or challenged):  5,188
+  Expected cases made WORSE (wrong that would have been right):       1,065.4
+  Expected cases made BETTER (right that would have been wrong):      439.1
+  Net wrong cases added:                                              626.1
+
+The "cases made better" exist because over-reliant reviewers sometimes defer
+to an incorrect AI — forcing independence on those cases produces a correct
+outcome. But this is a small offset: AI is correct ~90.6% of the time
+overall, so for every 1 case the intervention saves by exposing an AI error,
+it creates roughly 1.0 cases that were correct (via AI deferral) and are now wrong.
+
+BY INTERVENTION GROUP:
+
+  OVER / HIGH  (16 reviewers,  4,335 cases affected)
+    Cases made worse:        891.6
+    Cases made better:       202.6
+    Net wrong added:        +688.9
+    Under-reliance fixed:     95.0  (calibration, no AI withheld)
+
+  UNDER / HIGH  (6 reviewers,  0 cases affected)
+    Cases made worse:          0.0
+    Cases made better:       143.0
+    Net wrong added:        -143.0
+    Under-reliance fixed:    143.0  (calibration, no AI withheld)
+
+  UNDER / LOW  (3 reviewers,  0 cases affected)
+    Cases made worse:          0.0
+    Cases made better:        39.0
+    Net wrong added:         -39.0
+    Under-reliance fixed:     39.0  (calibration, no AI withheld)
+
+  WATCH / MEDIUM  (35 reviewers,  853 cases affected)
+    Cases made worse:        173.8
+    Cases made better:        54.5
+    Net wrong added:        +119.2
+    Under-reliance fixed:    523.0  (calibration, no AI withheld)
+
+The heaviest absolute cost falls on the R024 reviewer
+(control_always_ai arm), who has both a high deferred_rate
+(97.34%) and a low estimated independent accuracy
+(54.00%), meaning forced-independent cases go wrong
+more often. They are also receiving the most intensive intervention (weekly blind_cases
++ disagreement_prompts), so the product is the highest expected wrong-case count:
+87.1 cases worse over 24 weeks (~3.6/week).
+
+UNDER-RELIANT REVIEWERS (6 high-risk + 3 low-risk):
+  These reviewers receive confidence calibration feedback — no AI is withheld.
+  Their cost column is zero. The ledger records instead the cases they are
+  currently getting wrong because they override correct AI recommendations:
+  454 under-reliance events in the 24-week log.
+  If calibration achieves 40% effectiveness, approximately
+  182 of those cases would shift to correct outcomes — a net gain
+  with no accuracy cost on the cost side.
+
+──────────────────────────────────────────────────────────────────────────────
+BENEFIT SIDE — Skill Preservation Gained
+──────────────────────────────────────────────────────────────────────────────
+
+The benefit is not measured in the same currency as the cost. Cases made worse
+are immediate, concrete, and countable. Skill preservation is deferred and
+probabilistic — it only materialises as a difference in accuracy on cases that
+arrive after the AI is unavailable, degraded, or distributional-shifted.
+
+The generate.py skill dynamics (the ground truth that produced this dataset):
+  Δskill/case = +0.030/25 from practice  −  0.052/25 from deferral
+  Converting one deferred case to a committed case: Δskill = +0.00328/case
+  (the +0.030 from gaining a practice rep plus the +0.052 from not losing one)
+
+ARM-LEVEL CALIBRATION (24-week, week-25 unassisted exam accuracy — README):
+  control_always_ai   0.609    ← 24 weeks of high deferral, no practice
+  withheld_ai         0.697    ← 12% of cases withheld; some forced practice
+  disagreement_prompt 0.800    ← structured challenge regime
+  blind_first         0.817    ← all cases require pre-commit; maximum practice
+
+The 0.208 accuracy gap between control and blind_first is the 24-week return
+on forced practice. Our intervention borrows from this effect proportionally.
+
+BENEFIT ESTIMATES BY GROUP:
+
+  OVER / HIGH  (16 reviewers)
+    Practice reps gained:         3141.6  (forced-independent decisions)
+    Skill gain (units, total):    10.3049
+    Exam accuracy gain / reviewer:0.0681  (over 24 weeks, arm-calibrated)
+    Implied exam accuracy gain:   +6.8pp on week-25 unassisted exam
+
+  UNDER / HIGH  (6 reviewers)
+    Skill gain (units):           0.0000   [skill not at risk; benefit is accuracy]
+    Under-reliance events fixed:  143.0  (cases already wrong that become right)
+    Cost:                         0 cases made worse
+
+  UNDER / LOW  (3 reviewers)
+    Skill gain (units):           0.0000   [skill not at risk; benefit is accuracy]
+    Under-reliance events fixed:  39.0  (cases already wrong that become right)
+    Cost:                         0 cases made worse
+
+  WATCH / MEDIUM  (35 reviewers)
+    Practice reps gained:         770.5  (forced-independent decisions)
+    Skill gain (units, total):    2.5281
+    Exam accuracy gain / reviewer:0.0076  (over 24 weeks, arm-calibrated)
+    Implied exam accuracy gain:   +0.8pp on week-25 unassisted exam
+
+AGGREGATE:
+  Total practice reps gained:     3912.1
+  Total skill preserved (units):  12.8330
+  Avg exam accuracy gain/reviewer:0.0226  (+2.3pp)
+
+──────────────────────────────────────────────────────────────────────────────
+THE LEDGER IN ONE TABLE
+──────────────────────────────────────────────────────────────────────────────
+
+                        COST SIDE              BENEFIT SIDE
+  Group              Cases Worse  Net Added   Exam Acc Gain   Cases Worse per +1pp
+  ──────────────────────────────────────────────────────────────────────────────
+  OVER / HIGH             891.6     +688.9   +6.8pp/reviewer   8.2
+  UNDER / HIGH              0.0     -143.0   +0.0pp/reviewer   0 (no AI withheld)
+  UNDER / LOW               0.0      -39.0   +0.0pp/reviewer   0 (no AI withheld)
+  WATCH / MEDIUM          173.8     +119.2   +0.8pp/reviewer   6.5
+
+  TOTAL                 1065.4     +626.1
+
+──────────────────────────────────────────────────────────────────────────────
+PLAIN-LANGUAGE ACCOUNT — What Is Actually Being Traded
+──────────────────────────────────────────────────────────────────────────────
+
+The ledger does not balance in a straightforward way, and it would be
+dishonest to pretend it does.
+
+THE COST IS CERTAIN AND NEAR-TERM.
+  When you withhold AI assistance from an over-reliant reviewer, some cases
+  immediately go wrong that would have gone right. These are real patients or
+  real code changes — not statistical abstractions. The expected count, applied
+  to the 24-week event log, is 1065 cases made worse across all
+  16 OVER/HIGH reviewers, or about 67 cases per reviewer over 24 weeks
+  — roughly 2.8 wrong case per reviewer per week during active intervention.
+
+  The cases most at risk are the easy, high-confidence AI cases: when AI
+  confidence is ≥ 0.80, AI is correct about 93% of the time. If you force
+  a reviewer away from that signal and their independent accuracy is 0.65–0.75,
+  most of those cases will go wrong. The intervention is not cost-free —
+  it is a deliberate, controlled sacrifice of near-term accuracy.
+
+THE BENEFIT IS DEFERRED AND CONTINGENT.
+  The benefit is not an improvement in tomorrow's accuracy. It is a reduction
+  in how bad things will get if the AI goes offline, degrades, or encounters
+  an out-of-distribution case stream. The README shows control arm reviewers
+  scoring 0.609 on the week-25 unassisted exam — a number that is invisible
+  in the live deployment metrics (assisted accuracy appears fine at 0.866).
+  Intervention buys back some of that 0.208 gap. Our estimate for OVER/HIGH
+  reviewers is +6.8pp per reviewer over 24 weeks — movement toward blind_first's 0.817.
+  But this only materialises when the AI is absent. If it is never absent,
+  the benefit is never realised.
+
+  This contingency is not a reason to skip the intervention — it is exactly
+  why the decision is hard. You cannot know in advance whether the AI will
+  degrade. You are paying now for insurance against a future you cannot see.
+
+UNDER-RELIANT REVIEWERS ARE A DIFFERENT PROBLEM.
+  The 9 reviewers getting confidence calibration have no cost-side entry.
+  Their accuracy is already lower than it should be — not from capability
+  loss, but from distrust. Every under_reliance event in the log
+  (454 events total) is a case the AI got right that the reviewer got
+  wrong. Calibration feedback does not create new wrong cases; it attempts
+  to correct wrong cases that are already happening. If it achieves even
+  modest effectiveness, the ledger improves with no trade-off at all.
+  This is the asymmetry between the two failure modes: over-reliance
+  interventions require accepting near-term harm; under-reliance
+  interventions do not.
+
+THE UNCOMFORTABLE CONCLUSION.
+  The right question is not "does the ledger net out positive?" — it depends
+  entirely on how you weight immediate cases vs. future skill risk, and on
+  whether you think the AI will ever be unavailable or degraded.
+
+  What the ledger makes undeniable:
+  (1) Doing nothing has a cost too — the control arm's 0.609 unassisted
+      accuracy is the cost of 24 weeks of unmanaged over-reliance.
+  (2) Intervening has a cost — approximately 1065 cases made worse
+      in a 24-week deployment, net of the cases the intervention saves.
+  (3) The exchange rate is roughly 785 wrong cases now per skill-unit
+      preserved — a number that must be judged against the stakes of the
+      specific domain (chest X-ray triage vs. code review have very different
+      tolerance for either type of error).
+
+These numbers should be put in front of a clinical or engineering governance
+board, not collapsed into a single approval score. The ledger's job is to
+force the confrontation, not resolve it.

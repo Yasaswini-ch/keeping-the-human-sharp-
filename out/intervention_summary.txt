@@ -1,0 +1,142 @@
+==============================================================================
+  PS-I5 INTERVENTION POLICY SUMMARY  (Week-24 snapshot)
+==============================================================================
+
+POLICY DESIGN PHILOSOPHY
+─────────────────────────
+Over-reliant reviewers  → Restore independent judgment through FORCED PRACTICE.
+                          They have learned to defer; the fix is practice reps
+                          they can't skip (blind cases / seeded probes) + friction
+                          that surfaces disagreement (disagreement prompts).
+
+Under-reliant reviewers → CALIBRATE CONFIDENCE, not force more independence.
+                          They already exercise independent judgment — making them
+                          do more blind cases is redundant. Their cost is an
+                          assisted-accuracy deficit from ignoring valid AI signals.
+                          The fix is retrospective feedback showing P(AI correct |
+                          confidence band): they need to learn WHEN to trust the AI,
+                          not to practice doubting it more.
+
+DECISION TABLE (rule set)
+──────────────────────────────────────────────────────────────────────────────
+STATE                                  INTERVENTION                           FREQ               STOP SIGNAL
+──────────────────────────────────────────────────────────────────────────────
+  OVER / HIGH  (cap low + declining OR wide CI) blind_cases + disagree_prompts [+ workload_rebal if blind_n<15] weekly             cap≥0.73 AND over_rate<0.06 × 4wk
+  OVER / MEDIUM  (declining OR wide CI OR cap low) blind_cases OR seeded_probes [if blind_first arm] bi-weekly          over_rate<0.07 AND cap>0.70 × 3wk
+  OVER / LOW  (no acute flag)          seeded_probes  (lightweight sentinel)  monthly            over_rate<0.06 × 6wk
+  UNDER / HIGH  (under_rate≥0.15 OR ≥0.08 + wide CI) confidence_calibration + targeted_retraining bi-weekly          under_rate<0.06 OR asst_acc_gap<2pp × 4wk
+  UNDER / MEDIUM  (under_rate≥0.08)    confidence_calibration_feedback        monthly            under_rate<0.07 OR asst_acc_gap<3pp × 4wk
+  UNDER / LOW  (under_rate 0.04–0.08)  confidence_calibration_feedback  (light touch) quarterly          under_rate<0.05 × 8wk
+  WATCH / MEDIUM or LOW  (borderline signals) seeded_probes  (diagnostic)            monthly            APPROPRIATE ×6wk OR escalate to OVER/UNDER branch
+  APPROPRIATE                          no_intervention  (passive monitoring)  N/A                re-classify if over/under_rate crosses threshold
+
+──────────────────────────────────────────────────────────────────────────────
+REVIEWER COUNTS BY CLASS × RISK
+──────────────────────────────────────────────────────────────────────────────
+  OVER         / HIGH      →   16 reviewers
+  UNDER        / HIGH      →    6 reviewers
+  UNDER        / LOW       →    3 reviewers
+  WATCH        / MEDIUM    →   35 reviewers
+  TOTAL                     →   60 reviewers
+
+──────────────────────────────────────────────────────────────────────────────
+INTERVENTION TYPE DISTRIBUTION
+──────────────────────────────────────────────────────────────────────────────
+  seeded_probes                                                 35 reviewers
+  blind_cases + disagreement_prompts                            16 reviewers
+  confidence_calibration + targeted_retraining                   6 reviewers
+  confidence_calibration_feedback                                3 reviewers
+
+──────────────────────────────────────────────────────────────────────────────
+PER-REVIEWER ASSIGNMENTS  (sorted by risk level, then over_reliance_rate desc)
+──────────────────────────────────────────────────────────────────────────────
+  ID      Class        Risk    CapEst  Wdth   OvRlnc  UnRlnc  Trend    Intervention                               Flags
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  C010    OVER         HIGH    0.7169  0.412  0.1111  0.0040  -0.0051  blind_cases + disagreement_prompts         declining_trend; wide_interval; over_reliance_high; defer_very_high
+  R010    OVER         HIGH    0.6749  0.412  0.1031  0.0186  +0.0020  blind_cases + disagreement_prompts         wide_interval; low_capability; over_reliance_high; defer_very_high
+  R004    OVER         HIGH    0.6401  0.389  0.0987  0.0592  -0.0265  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; over_reliance_high; defer_very_high
+  R028    OVER         HIGH    0.6003  0.380  0.0986  0.0161  +0.0009  blind_cases + disagreement_prompts         wide_interval; low_capability; over_reliance_high; defer_very_high
+  R019    OVER         HIGH    0.8069  0.378  0.0980  0.0254  -0.0069  blind_cases + disagreement_prompts         declining_trend; wide_interval; over_reliance_high; defer_very_high
+  R024    OVER         HIGH    0.6118  0.380  0.0940  0.0195  -0.0128  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; over_reliance_high; defer_very_high
+  R020    OVER         HIGH    0.6399  0.380  0.0936  0.0230  -0.0160  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; over_reliance_high; defer_very_high
+  C003    OVER         HIGH    0.7725  0.389  0.0919  0.0126  -0.0101  blind_cases + disagreement_prompts         declining_trend; wide_interval; over_reliance_high; defer_very_high
+  R040    OVER         HIGH    0.6144  0.380  0.0906  0.0977  -0.0295  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; over_reliance_high; under_reliance_high
+  R036    OVER         HIGH    0.6246  0.390  0.0848  0.0144  -0.0031  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  C004    OVER         HIGH    0.6293  0.389  0.0829  0.0144  -0.0268  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R038    OVER         HIGH    0.6587  0.412  0.0823  0.0120  -0.0061  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R032    OVER         HIGH    0.6296  0.380  0.0819  0.0374  -0.0291  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R016    OVER         HIGH    0.6063  0.380  0.0802  0.0267  -0.0201  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R012    OVER         HIGH    0.6467  0.389  0.0736  0.0197  -0.0143  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R008    OVER         HIGH    0.6164  0.380  0.0625  0.0304  -0.0091  blind_cases + disagreement_prompts         declining_trend; wide_interval; low_capability; defer_very_high
+  R031    UNDER        HIGH    0.8588  0.321  0.0497  0.0995  +0.0095  confidence_calibration + targeted_retraini wide_interval; under_reliance_high
+  R029    UNDER        HIGH    0.8378  0.347  0.0431  0.0916  +0.0127  confidence_calibration + targeted_retraini wide_interval; already_blind_arm; under_reliance_high
+  C000    UNDER        HIGH    0.6532  0.380  0.0390  0.1294  -0.0008  confidence_calibration + targeted_retraini wide_interval; low_capability; under_reliance_high
+  R005    UNDER        HIGH    0.8831  0.297  0.0299  0.1213  +0.0014  confidence_calibration + targeted_retraini wide_interval; already_blind_arm; under_reliance_high
+  R021    UNDER        HIGH    0.8622  0.318  0.0283  0.0956  -0.0102  confidence_calibration + targeted_retraini declining_trend; wide_interval; already_blind_arm; under_reliance_high
+  C006    UNDER        HIGH    0.7630  0.400  0.0275  0.1081  -0.0027  confidence_calibration + targeted_retraini wide_interval; under_reliance_high
+  C015    UNDER        LOW     0.8297  0.355  0.0252  0.0631  +0.0090  confidence_calibration_feedback            wide_interval
+  R041    UNDER        LOW     0.8920  0.288  0.0233  0.0519  +0.0016  confidence_calibration_feedback            wide_interval; already_blind_arm
+  R043    UNDER        LOW     0.8962  0.288  0.0072  0.0575  +0.0192  confidence_calibration_feedback            wide_interval
+  R030    WATCH        MEDIUM  0.7192  0.412  0.0879  0.0502  -0.0052  seeded_probes                              declining_trend; wide_interval; defer_very_high
+  C013    WATCH        MEDIUM  0.9077  0.272  0.0870  0.0504  +0.0017  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  C001    WATCH        MEDIUM  0.8922  0.287  0.0839  0.0679  +0.0060  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  R039    WATCH        MEDIUM  0.8561  0.324  0.0835  0.0089  -0.0020  seeded_probes                              wide_interval; defer_very_high
+  C008    WATCH        MEDIUM  0.6569  0.380  0.0817  0.0462  -0.0185  seeded_probes                              declining_trend; wide_interval; low_capability; defer_very_high
+  R026    WATCH        MEDIUM  0.7097  0.412  0.0805  0.0543  +0.0049  seeded_probes                              wide_interval; defer_very_high
+  R037    WATCH        MEDIUM  0.8840  0.296  0.0784  0.0303  -0.0017  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  R000    WATCH        MEDIUM  0.6531  0.380  0.0775  0.0757  -0.0156  seeded_probes                              declining_trend; wide_interval; low_capability; defer_very_high
+  R022    WATCH        MEDIUM  0.7239  0.412  0.0771  0.0375  +0.0049  seeded_probes                              wide_interval; defer_very_high
+  R002    WATCH        MEDIUM  0.7226  0.412  0.0763  0.0100  +0.0163  seeded_probes                              wide_interval; defer_very_high
+  C005    WATCH        MEDIUM  0.8710  0.314  0.0758  0.0632  -0.0023  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  R014    WATCH        MEDIUM  0.7276  0.412  0.0732  0.0508  -0.0002  seeded_probes                              wide_interval; defer_very_high
+  C007    WATCH        MEDIUM  0.8552  0.325  0.0721  0.0562  +0.0034  seeded_probes                              wide_interval; defer_very_high
+  C011    WATCH        MEDIUM  0.8381  0.342  0.0712  0.0730  +0.0023  seeded_probes                              wide_interval; defer_very_high
+  R023    WATCH        MEDIUM  0.8245  0.360  0.0701  0.0432  +0.0040  seeded_probes                              wide_interval; defer_very_high
+  R006    WATCH        MEDIUM  0.6869  0.400  0.0676  0.0398  +0.0106  seeded_probes                              wide_interval; defer_very_high
+  R015    WATCH        MEDIUM  0.8704  0.309  0.0665  0.0701  +0.0157  seeded_probes                              wide_interval
+  C009    WATCH        MEDIUM  0.8697  0.315  0.0661  0.1229  +0.0027  seeded_probes                              wide_interval; already_blind_arm; under_reliance_high
+  R035    WATCH        MEDIUM  0.8448  0.335  0.0661  0.0875  -0.0164  seeded_probes                              declining_trend; wide_interval; under_reliance_high
+  R017    WATCH        MEDIUM  0.8265  0.353  0.0651  0.0475  +0.0152  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  R034    WATCH        MEDIUM  0.8186  0.377  0.0609  0.2110  +0.0002  seeded_probes                              wide_interval; under_reliance_high
+  C002    WATCH        MEDIUM  0.7605  0.412  0.0589  0.0447  -0.0112  seeded_probes                              declining_trend; wide_interval; defer_very_high
+  R013    WATCH        MEDIUM  0.8682  0.312  0.0582  0.0547  +0.0035  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  C012    WATCH        MEDIUM  0.6653  0.380  0.0547  0.0459  +0.0070  seeded_probes                              wide_interval; low_capability; defer_very_high
+  R042    WATCH        MEDIUM  0.7324  0.400  0.0538  0.0757  -0.0011  seeded_probes                              wide_interval
+  C014    WATCH        MEDIUM  0.8042  0.386  0.0536  0.2480  +0.0008  seeded_probes                              wide_interval; under_reliance_high
+  R011    WATCH        MEDIUM  0.8440  0.336  0.0517  0.0713  +0.0153  seeded_probes                              wide_interval
+  R027    WATCH        MEDIUM  0.8494  0.330  0.0517  0.1747  -0.0031  seeded_probes                              declining_trend; wide_interval; under_reliance_high
+  R018    WATCH        MEDIUM  0.7237  0.412  0.0509  0.0591  +0.0004  seeded_probes                              wide_interval; defer_very_high
+  R033    WATCH        MEDIUM  0.8599  0.325  0.0506  0.0940  +0.0015  seeded_probes                              wide_interval; already_blind_arm; under_reliance_high
+  R001    WATCH        MEDIUM  0.8729  0.307  0.0479  0.0426  -0.0066  seeded_probes                              declining_trend; wide_interval; already_blind_arm; defer_very_high
+  R009    WATCH        MEDIUM  0.8685  0.311  0.0479  0.0550  +0.0095  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+  R003    WATCH        MEDIUM  0.8646  0.320  0.0469  0.0487  +0.0079  seeded_probes                              wide_interval
+  R007    WATCH        MEDIUM  0.8184  0.361  0.0370  0.0617  +0.0044  seeded_probes                              wide_interval
+  R025    WATCH        MEDIUM  0.8632  0.322  0.0359  0.0503  +0.0215  seeded_probes                              wide_interval; already_blind_arm; defer_very_high
+──────────────────────────────────────────────────────────────────────────────
+
+NOTES
+─────
+1. capability_estimate, interval_lo/hi, deferred_rate, committed_rate and blind_sample_n
+   come from MOCK data (same schema as Person A's handoff table).  Substitute the real
+   table and re-run — no policy code changes needed.
+
+2. "blind_cases" means cases where the AI recommendation is withheld until after the
+   reviewer commits a label — identical to the blind_first arm mechanism.
+
+3. "confidence_calibration_feedback" = a weekly report showing the reviewer their
+   own under_reliance events alongside the calibration curve
+   (P(AI correct | confidence bucket)) from out/calibration_curve.csv.
+   The goal is to show that high-confidence AI signals (≥0.80) are accurate ~92%
+   of the time — reviewers who routinely override those signals are paying a
+   pointless accuracy cost.
+
+4. Stop conditions use 4-week rolling windows to avoid stopping prematurely
+   due to noise.  All stop decisions should be confirmed by a human supervisor.
+
+5. Reviewers already in the blind_first arm receive seeded_probes as their escalated
+   intervention (not more blind cases, which they already have) and disagreement_prompts
+   if escalation is warranted.
+
+6. Workload rebalancing (volume reduction) is added whenever blind_sample_n < 15,
+   because the capability estimate is too uncertain to rely on; reducing case volume
+   while increasing probe density improves both measurement and protection.
