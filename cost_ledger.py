@@ -238,31 +238,25 @@ for rid in reviewer_stats:
 #   probe_fraction_net: net new probe density (above 3.5% baseline)
 
 INT_INTENSITIES = {
-    # OVER / HIGH  weekly
-    "blind_cases + disagreement_prompts": {
+    # OVER / HIGH (risk_score == 3)  weekly -- forced blind cases + disagreement prompts
+    "forced_blind_cases + disagreement_prompts": {
         "blind_fraction":      0.25,
         "prompt_fraction":     0.35,   # applied to fast_defer subset
         "probe_fraction_net":  0.0,
     },
-    # OVER / MED  bi-weekly
-    "periodic_forced_blind_cases": {
+    # WATCH / MEDIUM (risk_score == 2)  lighter touch
+    "forced_blind_cases (light) + disagreement_prompts (targeted)": {
         "blind_fraction":      0.125,
-        "prompt_fraction":     0.0,
+        "prompt_fraction":     0.15,
         "probe_fraction_net":  0.0,
-    },
-    # Seeded probes only (OVER/LOW and WATCH)
-    "seeded_probes": {
-        "blind_fraction":      0.0,
-        "prompt_fraction":     0.0,
-        "probe_fraction_net":  0.045,  # from 3.5% to 8%
     },
     # UNDER reviewers — no AI withheld
-    "confidence_calibration + targeted_retraining": {
+    "confidence_calibration_feedback": {
         "blind_fraction":      0.0,
         "prompt_fraction":     0.0,
         "probe_fraction_net":  0.0,
     },
-    "confidence_calibration_feedback": {
+    "none": {
         "blind_fraction":      0.0,
         "prompt_fraction":     0.0,
         "probe_fraction_net":  0.0,

@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# A4-stretch raw NIH ChestX-ray14 images/tar (~65MB) -- re-fetchable, see
+# A4_STRETCH_CHESTXRAY14.md "Outputs on disk" for the curl/tar commands.
+a4_stretch_chestxray14/images/
+a4_stretch_chestxray14/ChestXray14_test_000.tar

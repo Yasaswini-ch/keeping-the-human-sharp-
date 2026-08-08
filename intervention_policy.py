@@ -56,6 +56,7 @@ if not os.path.exists(handoff_path):
 
 reliance_by_reviewer = {r["reviewer_id"]: r for r in read_csv(reliance_path)}
 handoff = read_csv(handoff_path)
+reviewers_pub = {r["reviewer_id"]: r for r in read_csv(os.path.join(BASE, "public", "reviewers.csv"))}
 
 by_rev = defaultdict(list)
 for r in handoff:
@@ -102,16 +103,19 @@ for rid, rows in by_rev.items():
     recent_defer = sum(defer[-N_RECENT:]) / N_RECENT
     # rough noise floor: avg half-width of the estimate's own uncertainty over the run
     noise_floor = (sum(widths) / len(widths)) / 2
+    latest = rows[-1]  # most recent week's row (week 24), for the point-in-time snapshot
 
     rel = reliance_by_reviewer.get(rid, {})
     under_rate = float(rel.get("under_reliance_rate", 0) or 0)
     skep_rate = float(rel.get("appropriate_skepticism_rate", 0) or 0)
     over_rate = float(rel.get("over_reliance_rate", 0) or 0)
+    pub = reviewers_pub.get(rid, {})
 
     features[rid] = {
         "reviewer_id": rid,
-        "domain": rel.get("domain", rows[0]["reviewer_id"][0]),
-        "arm": rel.get("arm", ""),
+        "domain": rel.get("domain", pub.get("domain", "")),
+        "arm": rel.get("arm", pub.get("arm", "")),
+        "years_experience": pub.get("years_experience", ""),
         "capability_slope_per_week": slope,
         "capability_early_avg_wk1_4": early_avg,
         "capability_recent_avg_wk21_24": recent_avg,
@@ -122,6 +126,12 @@ for rid, rows in by_rev.items():
         "under_reliance_rate": under_rate,
         "appropriate_skepticism_rate": skep_rate,
         "over_reliance_rate": over_rate,
+        "capability_est_wk24": latest["capability_estimate"],
+        "interval_lo_wk24": latest["interval_lo"],
+        "interval_hi_wk24": latest["interval_hi"],
+        "deferred_rate_wk24": latest["deferred_rate"],
+        "committed_rate_wk24": latest["committed_rate"],
+        "blind_sample_n_wk24": latest["blind_sample_n"],
     }
 
 # Cohort medians for "wide" / "high" relative thresholds
@@ -209,8 +219,10 @@ def assign_policy(f):
 
 
 rows_out = []
+policy_by_rid = {}
 for rid, f in sorted(features.items()):
     state, intervention, detail, frequency, stop_condition = assign_policy(f)
+    policy_by_rid[rid] = (state, intervention, detail, frequency, stop_condition)
     rows_out.append(
         {
             "reviewer_id": rid,
@@ -240,6 +252,124 @@ with open(os.path.join(OUT, "intervention_policy.csv"), "w", newline="", encodin
     w = csv.DictWriter(f, fieldnames=list(rows_out[0].keys()))
     w.writeheader()
     w.writerows(rows_out)
+
+# ---------------------------------------------------------------------------
+# out/intervention_assignments.csv -- legacy schema consumed by cost_ledger.py
+# (reliance_class / risk_level / intervention_type / flags), populated from THIS
+# run's real handoff_table.csv-derived features, not a mock table.
+# ---------------------------------------------------------------------------
+STATE_TO_CLASS_RISK = {
+    "over_reliance_risk": ("OVER", "HIGH"),
+    "watch": ("WATCH", "MEDIUM"),
+    "under_reliant": ("UNDER", "HIGH"),  # risk split refined below
+    "healthy": ("APPROPRIATE", "LOW"),
+}
+
+over_rate_med = statistics.median(over_all := [f["over_reliance_rate"] for f in features.values()])
+under_rate_flagged = [f["under_reliance_rate"] for f in features.values() if f["flag_under_reliant"]]
+under_rate_med_flagged = statistics.median(under_rate_flagged) if under_rate_flagged else 0.0
+defer_q3 = statistics.quantiles(defer_all, n=4)[2]
+
+assignment_rows = []
+for rid, f in sorted(features.items()):
+    state, intervention, detail, frequency, stop_condition = policy_by_rid[rid]
+    reliance_class, risk_level = STATE_TO_CLASS_RISK[state]
+    if reliance_class == "UNDER":
+        risk_level = "HIGH" if f["under_reliance_rate"] >= under_rate_med_flagged else "LOW"
+
+    flags = []
+    if f["flag_declining"]:
+        flags.append("declining_trend")
+    if f["flag_wide_interval"]:
+        flags.append("wide_interval")
+    if f["capability_est_wk24"] < 0:
+        flags.append("low_capability")
+    if f["over_reliance_rate"] > over_rate_med and reliance_class == "OVER":
+        flags.append("over_reliance_high")
+    if f["flag_under_reliant"]:
+        flags.append("under_reliance_high")
+    if f["recent_deferred_rate"] > defer_q3:
+        flags.append("defer_very_high")
+    if f["arm"] == "blind_first":
+        flags.append("already_blind_arm")
+
+    assignment_rows.append(
+        {
+            "reviewer_id": rid,
+            "domain": f["domain"],
+            "arm": f["arm"],
+            "years_exp": f["years_experience"],
+            "capability_est": round(f["capability_est_wk24"], 4),
+            "interval_lo": round(f["interval_lo_wk24"], 4),
+            "interval_hi": round(f["interval_hi_wk24"], 4),
+            "interval_width": round(f["recent_interval_width"], 4),
+            "deferred_rate": round(f["deferred_rate_wk24"], 4),
+            "committed_rate": round(f["committed_rate_wk24"], 4),
+            "over_reliance_rate": round(f["over_reliance_rate"], 4),
+            "under_reliance_rate": round(f["under_reliance_rate"], 4),
+            "appr_skep_rate": round(f["appropriate_skepticism_rate"], 4),
+            "weekly_trend": round(f["capability_slope_per_week"], 5),
+            "blind_sample_n": f["blind_sample_n_wk24"],
+            "reliance_class": reliance_class,
+            "risk_level": risk_level,
+            "intervention_type": intervention,
+            "frequency": frequency,
+            "stop_condition": stop_condition,
+            "flags": "; ".join(flags),
+        }
+    )
+
+ASSIGN_FIELDS = [
+    "reviewer_id", "domain", "arm", "years_exp", "capability_est", "interval_lo",
+    "interval_hi", "interval_width", "deferred_rate", "committed_rate",
+    "over_reliance_rate", "under_reliance_rate", "appr_skep_rate", "weekly_trend",
+    "blind_sample_n", "reliance_class", "risk_level", "intervention_type",
+    "frequency", "stop_condition", "flags",
+]
+with open(os.path.join(OUT, "intervention_assignments.csv"), "w", newline="", encoding="utf-8") as f:
+    w = csv.DictWriter(f, fieldnames=ASSIGN_FIELDS)
+    w.writeheader()
+    w.writerows(assignment_rows)
+print(f"Wrote out/intervention_assignments.csv ({len(assignment_rows)} reviewers, real handoff_table.csv data).")
+
+# ---------------------------------------------------------------------------
+# out/intervention_summary.txt -- human-readable per-reviewer table, real data
+# ---------------------------------------------------------------------------
+summary_lines = []
+S = summary_lines.append
+S("=" * 78)
+S("  PS-I5 INTERVENTION POLICY SUMMARY  (Week-24 snapshot, real handoff_table.csv)")
+S("=" * 78)
+S("")
+S("POLICY DESIGN PHILOSOPHY")
+S("-" * 25)
+S("Over-reliant reviewers  -> Restore independent judgment through FORCED PRACTICE.")
+S("Under-reliant reviewers -> CALIBRATE CONFIDENCE, not force more independence.")
+S("")
+risk_order = {"OVER/HIGH": 0, "UNDER/HIGH": 1, "UNDER/LOW": 2, "WATCH/MEDIUM": 3, "APPROPRIATE/LOW": 4}
+sorted_assign = sorted(
+    assignment_rows,
+    key=lambda r: (risk_order.get(f"{r['reliance_class']}/{r['risk_level']}", 9), -r["over_reliance_rate"]),
+)
+S("PER-REVIEWER ASSIGNMENTS  (sorted by risk level, then over_reliance_rate desc)")
+S("-" * 78)
+S(f"  {'ID':6s}  {'Class':11s} {'Risk':6s}  {'CapEst':7s} {'Wdth':6s} {'OvRlnc':7s} {'UnRlnc':7s} {'Trend':8s} {'Intervention':40s} Flags")
+for r in sorted_assign:
+    S(f"  {r['reviewer_id']:6s}  {r['reliance_class']:11s} {r['risk_level']:6s}  "
+      f"{r['capability_est']:7.4f} {r['interval_width']:6.3f} {r['over_reliance_rate']:7.4f} "
+      f"{r['under_reliance_rate']:7.4f} {r['weekly_trend']:+8.4f}  {r['intervention_type']:40s} {r['flags']}")
+S("-" * 78)
+from collections import Counter as _Counter
+class_counts = _Counter(f"{r['reliance_class']} / {r['risk_level']}" for r in assignment_rows)
+S("REVIEWER COUNTS BY CLASS x RISK")
+S("-" * 78)
+for k, c in class_counts.most_common():
+    S(f"  {k:20s} -> {c:3d} reviewers")
+S(f"  {'TOTAL':20s} -> {len(assignment_rows):3d} reviewers")
+
+with open(os.path.join(OUT, "intervention_summary.txt"), "w", encoding="utf-8") as f:
+    f.write("\n".join(summary_lines) + "\n")
+print("Wrote out/intervention_summary.txt (real handoff_table.csv data).")
 
 # ---------------------------------------------------------------------------
 # Console summary

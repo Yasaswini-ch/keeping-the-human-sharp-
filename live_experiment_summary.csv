@@ -1,0 +1,60 @@
+participant_id,source,family,group,group_name,n_phase1,phase1_acc,n_phase2,phase2_acc,chance_rate,avg_rt_phase1_ms,avg_rt_phase2_ms,flag_low_effort,phase2_acc_above_chance
+043d6873-0849-4566-bd8d-bd431e81a493,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.75,10,0.9,0.5,11456.15,9572.5,False,0.8
+0a7ff933-7944-436b-a2d7-f9d4a3ed61bd,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.15,10,0.4,0.5,3333.75,88572.9,True,-0.19999999999999996
+1007ed5e-6847-4f88-9ad3-eeac03c85b01,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.95,10,0.9,0.5,4378.25,1994.7,False,0.8
+27a213a2-ae08-4480-a30c-a59d17ba1d7e,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.8,10,0.6,0.5,3436.0,6086.3,False,0.19999999999999996
+2d77484b-5034-431b-8933-d772cc8c5d9a,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.85,10,1.0,0.5,12035.65,12252.7,False,1.0
+4c7cab58-81f0-4441-b449-51589dc7edd0,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.85,10,0.9,0.5,4793.15,19226.8,False,0.8
+5bc55c7b-2b87-4a61-8c22-4c0d0cf633d0,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.2,10,0.4,0.5,888.3,521.1,True,-0.19999999999999996
+5d49962b-e8e4-42c9-a063-899bc95cc096,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.8,10,0.4,0.5,5696.25,9356.0,False,-0.19999999999999996
+6933d614-2dde-4d2b-bf30-ffb2d10939e2,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.65,10,0.2,0.5,1967.05,1196.2,False,-0.6
+8190de89-9982-4975-bd56-88f84a888ecb,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.75,10,1.0,0.5,12323.4,14428.8,False,1.0
+8c091793-5d2f-4564-912d-2a834cf0e0d9,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.65,10,0.5,0.5,4402.4,5758.9,False,0.0
+92ad5c49-5143-46c6-8cf2-23b4ae64510e,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.5,10,0.3,0.5,29743.6,8720.2,False,-0.4
+a425510b-d53e-4109-acaf-0322fd609269,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.45,10,0.5,0.5,8718.0,8925.1,False,0.0
+a46f5c94-7b18-4db4-83ea-405eb3fbc35f,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.4,10,0.4,0.5,2875.95,3448.5,False,-0.19999999999999996
+ae1a2844-c303-4e1c-93af-f7727364f955,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.15,10,0.0,0.5,938.9,734.8,False,-1.0
+b0461a0c-71aa-4482-a7b7-4bd942e33755,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.75,10,0.5,0.5,5551.85,9136.3,False,0.0
+b0dd3066-cb81-4dbc-a5d0-c4c0bdcc2e49,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.7,10,0.3,0.5,14355.25,12316.1,False,-0.4
+bc1e74f0-2e7b-43fc-8b77-429be149dc18,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.35,10,0.3,0.5,931.85,720.5,True,-0.4
+bc81e669-51f4-4c32-9778-a0c1fbda9484,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.75,10,0.5,0.5,3553.3,1445.2,False,0.0
+c58c7683-64ce-46d5-9fc5-1aaafec8e177,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.8,10,0.7,0.5,11136.15,32156.3,False,0.3999999999999999
+db39396d-dd73-40a9-bd9d-918ff8131b54,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.6,10,0.5,0.5,5264.85,7344.6,False,0.0
+f5295444-eea4-4154-bf36-8e4686adc32d,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.65,10,0.0,0.5,4656.4,538.9,False,-1.0
+fa85c29a-c5a1-4b02-93f4-8be798fa6daf,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,A,Continuous-AI,20,0.75,10,1.0,0.5,2561.95,23806.2,False,1.0
+081f724a-2190-49ab-9294-4ebe751ff87e,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.6,10,0.6,0.5,8593.15,8397.8,False,0.19999999999999996
+08df161d-ff13-49c7-985d-b4e874e05772,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.85,10,1.0,0.5,11881.0,11800.3,False,1.0
+22ca547a-b1c9-4675-9b20-1e0ef88b40eb,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.7,10,0.5,0.5,5252.55,6089.5,False,0.0
+3257ffa5-f2dd-41c2-bf41-13c196b1286d,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.75,10,0.7,0.5,17552.85,15097.1,False,0.3999999999999999
+410350e5-e9fc-4208-9271-004d5b7cd646,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.9,10,1.0,0.5,10532.75,11582.6,False,1.0
+4e0c72a0-ec4f-4bc2-9bb8-d4d245574f97,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.5,10,0.6,0.5,2868.35,3250.6,False,0.19999999999999996
+50eead95-ed86-422e-b12a-51010c7c8361,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.9,10,0.9,0.5,8512.05,9804.1,False,0.8
+5402838e-ae4e-4e1a-91da-0def049ecc90,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.95,10,1.0,0.5,5639.55,1970.6,False,1.0
+66998a4d-1371-4901-96f5-94d4b3f220ac,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.8,10,0.9,0.5,41113.1,54115.7,False,0.8
+7780f692-939c-4e1f-9887-915a56076880,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.5,10,0.3,0.5,1749.2,1376.9,True,-0.4
+7fd96540-6c77-42bf-98b8-a395af800514,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.6,10,0.4,0.5,4587.05,4676.5,False,-0.19999999999999996
+8c3c92f1-c8a5-40a6-a949-ae69a25e062a,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.55,10,0.4,0.5,5762.5,5704.4,False,-0.19999999999999996
+91f21174-1b2b-43aa-9d3e-512059f7d35a,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.65,10,0.4,0.5,4004.1,3597.8,False,-0.19999999999999996
+a117fd24-2b2b-4a35-9c5a-e21f4d0d6a7b,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.6,10,0.4,0.5,5101.1,5728.9,False,-0.19999999999999996
+a2178ad0-3fc4-4d0c-bb35-4c9c65632477,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.5,10,0.6,0.5,6117.55,4893.0,False,0.19999999999999996
+ae4f037d-e8fb-4946-9bef-655daabcbfb7,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.6,10,0.4,0.5,6515.05,7158.6,False,-0.19999999999999996
+aecd96bc-6bcc-4c6a-95f9-a2f4b50ce8cd,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.55,10,0.5,0.5,11369.75,8308.4,False,0.0
+bee198b3-1d6d-4c1e-9148-d31a510a3dff,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.65,10,0.4,0.5,7332.8,6839.9,False,-0.19999999999999996
+ce2e3b62-d302-4148-b829-c4e35eca9e54,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.7,10,0.2,0.5,3765.45,5212.8,False,-0.6
+d53c189d-266a-42ac-89f7-bef659565cc6,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.65,10,0.6,0.5,4644.75,360.7,False,0.19999999999999996
+ec8b707c-ce1e-48ec-8a2f-c44605773e52,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.3,10,0.2,0.5,850.55,266.6,True,-0.6
+f16367ef-e72b-4789-9a11-62fbf99ce6e6,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.9,10,0.5,0.5,3322.05,2388.1,False,0.0
+f24742da-2bb7-438c-9353-d3426afee72d,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.65,10,0.5,0.5,5391.1,7204.7,False,0.0
+f861b8bb-60c3-479a-9015-82561ea019e6,"gk_study (AI-vs-Human judgment, w/ hints)",gk_study,B,Periodic-Blind / intervention,20,0.3,10,0.7,0.5,7535.05,3887.9,False,0.3999999999999999
+hgfds-2b38,Myth-or-Fact v1,item_level,A,Continuous-AI,12,0.5,8,0.5,0.5,671.8333333333334,792.5,True,0.0
+kjhgfx-m1e3,Myth-or-Fact v1,item_level,B,Periodic-Blind / intervention,12,0.5,8,0.5,0.5,764.0,393.875,True,0.0
+vgbg-y739,Myth-or-Fact v1,item_level,B,Periodic-Blind / intervention,12,0.08333333333333333,8,0.875,0.5,1004.4166666666666,551.875,True,0.75
+de-vxuu,PS-I5 B.4,item_level,A,Continuous-AI,12,0.5,8,0.5,0.5,574.5,508.625,True,0.0
+prasanna-wtod,PS-I5 B.4,item_level,A,Continuous-AI,12,0.6666666666666666,8,0.375,0.5,3651.0,3415.0,False,-0.25
+see-f0xr,PS-I5 B.4,item_level,A,Continuous-AI,12,0.5,8,0.5,0.5,9339.0,692.625,True,0.0
+sree-g0pj,PS-I5 B.4,item_level,A,Continuous-AI,12,0.0,8,0.0,0.5,749.0833333333334,633.125,True,-1.0
+tarunmai-p537,PS-I5 B.4,item_level,A,Continuous-AI,12,0.6666666666666666,8,0.625,0.5,2859.4166666666665,2427.625,False,0.25
+yasaswini-5kxn,PS-I5 B.4,item_level,A,Continuous-AI,12,0.5,8,0.25,0.5,1945.6666666666667,3818.75,False,-0.5
+likhitha-sree-vn5l,PS-I5 B.4,item_level,B,Periodic-Blind / intervention,12,0.6666666666666666,8,0.5,0.5,4864.083333333333,1879.75,False,0.0
+rukku-n7iz,PS-I5 B.4,item_level,B,Periodic-Blind / intervention,12,0.75,8,0.375,0.5,3471.0,1054.875,False,-0.25
+sree-2rp0,PS-I5 B.4,item_level,B,Periodic-Blind / intervention,12,0.0,8,0.0,0.5,953.8333333333334,693.875,True,-1.0

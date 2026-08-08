@@ -9,7 +9,7 @@ Full derivation and per-group breakdown: [`out/cost_ledger_narrative.txt`](out/c
 | | Cost side (immediate) | Benefit side (deferred) |
 |---|---|---|
 | **What it measures** | Cases where withholding/challenging AI flips a correct outcome to wrong | Skill preserved, expressed as projected week-25 unassisted exam accuracy gain |
-| **Aggregate, all 60 reviewers** | **1,065 cases made worse**, 439 made better (net +626 wrong) | **12.8 skill-gain units**, 3,912 extra practice reps, mean **+2.3%** exam accuracy per reviewer |
+| **Aggregate, all 60 reviewers** | **716 cases made worse**, 564 made better (net +152 wrong) | **8.4 skill-gain units**, 2,566 extra practice reps, mean **+1.5%** exam accuracy per reviewer |
 | **Certainty** | Certain, near-term — directly counted from the log | Contingent — only materializes if/when AI assistance degrades or is unavailable |
 
 These are never combined into one score in this deliverable. `cost_per_exam_point` is reported as an *additional* ratio in the CSV for reference, not as a replacement for the two rows above.
@@ -18,9 +18,9 @@ These are never combined into one score in this deliverable. `cost_per_exam_poin
 
 | Risk tier | n reviewers | Cases made worse | Cases made better | Skill-gain units |
 |---|---|---|---|---|
-| HIGH | 22 | 891.6 | 345.6 | 10.30 |
-| LOW | 3 | 0.0 | 39.0 | 0.00 |
-| MEDIUM | 35 | 173.8 | 54.5 | 2.53 |
+| HIGH | 10 | 112.9 | 282.4 | 1.22 |
+| LOW | 26 | 0.0 | 138.0 | 0.00 |
+| MEDIUM | 24 | 603.0 | 143.4 | 7.20 |
 
 ## The trade-off, stated plainly
 
@@ -41,7 +41,7 @@ judgment will be worst-positioned for.
 **Under-reliant reviewers are the one case where this isn't a trade at all.** Their
 skill is already fine; what's broken is trust calibration, not capability. Their
 intervention (confidence-calibration feedback) costs 0 cases on the cost side — there
-is no AI-withholding for this group — while still targeting 9 reviewers'
+is no AI-withholding for this group — while still targeting 15 reviewers'
 existing wrong-due-to-override cases.
 
 This ledger does not resolve whether the trade is worth it — that depends on how a
