@@ -31,14 +31,16 @@ If you don't already have the repo locally:
 
 ```bash
 git clone https://github.com/Yasaswini-ch/keeping-the-human-sharp-.git
-cd keeping-the-human-sharp-/ps_i5_skill_atrophy
+cd keeping-the-human-sharp-
 ```
 
 (If you downloaded a ZIP from GitHub instead of using `git clone`, unzip it and `cd`
-into the extracted `ps_i5_skill_atrophy` folder — same result.) Every command below
-assumes your terminal's current directory is this folder — check with `pwd` (Mac/Linux/Git
-Bash) or `cd` with no arguments (Windows Command Prompt/PowerShell); it should end in
-`ps_i5_skill_atrophy`.
+into the extracted folder — same result. GitHub's ZIP sometimes names the extracted
+folder `keeping-the-human-sharp--main` instead — `cd` into whatever it actually
+produced.) Every command below assumes your terminal's current directory is this
+folder, the one directly containing `dashboard.html` and `README.md` — check with
+`ls` (Mac/Linux/Git Bash) or `dir` (Windows Command Prompt/PowerShell) and confirm
+you see those two files before continuing.
 
 ### 2. Check you have Python
 
