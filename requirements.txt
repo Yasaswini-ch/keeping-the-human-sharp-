@@ -1,0 +1,15 @@
+# Core pipeline (A.1-A.5, B.1-B.3, dashboard data prep, all validation scripts)
+pandas
+numpy
+scipy
+scikit-learn
+statsmodels
+matplotlib
+
+# A.4-stretch only (real ChestX-ray14 external validation) -- heavy ML deps,
+# not needed for anything else in this repo. Install only if running
+# a4_stretch_chestxray14/run_a4_stretch.py.
+# torch
+# torchvision
+# torchxrayvision
+# scikit-image
