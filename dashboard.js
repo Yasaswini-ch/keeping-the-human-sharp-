@@ -457,7 +457,7 @@ function renderRhoSummary() {
 function renderCostChart() {
   const svg = document.getElementById("costChart");
   svg.innerHTML = "";
-  const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 46 };
+  const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 68 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
   const groups = DATA.cost_groups;
   const maxVal = Math.max(...groups.map((g) => Math.max(g.cases_made_worse, g.cases_made_better)), 1);
@@ -494,7 +494,8 @@ function renderCostChart() {
       rect.style.cursor = "pointer";
       svg.appendChild(rect);
     });
-    const lab = svgEl("text", { x: cx, y: M.t + plotH + 16, class: "axis-label", "text-anchor": "middle" });
+    const ly = M.t + plotH + 12;
+    const lab = svgEl("text", { x: cx, y: ly, class: "axis-label", "text-anchor": "end", transform: `rotate(-30 ${cx} ${ly})` });
     lab.textContent = g.group;
     svg.appendChild(lab);
   });
@@ -508,7 +509,7 @@ function renderCostChart() {
 function renderBenefitChart() {
   const svg = document.getElementById("benefitChart");
   svg.innerHTML = "";
-  const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 46 };
+  const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 68 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
   const groups = DATA.cost_groups;
   const maxVal = Math.max(...groups.map((g) => g.skill_gain_units), 1);
@@ -546,7 +547,8 @@ function renderBenefitChart() {
     const vlab = svgEl("text", { x: cx, y: y - 6, class: "axis-label", "text-anchor": "middle" });
     vlab.textContent = fmt(v, 1);
     svg.appendChild(vlab);
-    const lab = svgEl("text", { x: cx, y: M.t + plotH + 16, class: "axis-label", "text-anchor": "middle" });
+    const ly = M.t + plotH + 12;
+    const lab = svgEl("text", { x: cx, y: ly, class: "axis-label", "text-anchor": "end", transform: `rotate(-30 ${cx} ${ly})` });
     lab.textContent = g.group;
     svg.appendChild(lab);
   });

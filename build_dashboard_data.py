@@ -1,9 +1,10 @@
 """
 PS-I5: assemble a single JSON blob for dashboard.html, from real output files
-only (handoff_table.csv, D3, self_validation_seeds, out/intervention_policy.csv,
+only (handoff_table.csv, D3, self_validation_seeds, D2_intervention_assignments.csv,
 D4_cost_account.csv, public/reviewers.csv for arm/domain lookup). Never reads
 review_events.csv or cases.csv (the raw 36,000-row log) -- the dashboard is
-built on the pipeline's outputs, not the source data.
+built on the pipeline's packaged deliverables, not the source data or raw
+out/ intermediates directly (run package_deliverables.py first).
 """
 import csv
 import json
@@ -81,7 +82,7 @@ self_validation_summary = {
 }
 
 # --- intervention assignments (B.2) -------------------------------------------
-interv_raw = read_csv("out/intervention_policy.csv")
+interv_raw = read_csv("D2_intervention_assignments.csv")
 interventions = []
 for r in interv_raw:
     interventions.append({

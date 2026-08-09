@@ -1,61 +1,61 @@
-reviewer_id,domain,arm,risk_level,intervention_type,n_cases_affected_total,n_cases_made_worse,n_cases_made_better,net_wrong_cases_added,n_practice_reps_gained,skill_gain_units,exam_acc_gain_est,arm_exam_baseline,projected_exam_with_intv,cost_per_exam_point
-C000,code_review,control_always_ai,HIGH,confidence_calibration_feedback,0,0.0,29.0,-29.0,0.0,0.0,0.0,0.609,0.609,0.0
-C001,code_review,blind_first,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),122,22.6,6.1,16.5,88.5,0.2901,0.0307,0.817,0.8477,737.0
-C002,code_review,withheld_ai,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
-C003,code_review,disagreement_prompt,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),131,39.8,5.2,34.6,98.7,0.3239,0.0342,0.8,0.8342,1162.6
-C004,code_review,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),132,34.0,5.9,28.1,98.9,0.3243,0.0343,0.609,0.6433,990.9
-C005,code_review,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-C006,code_review,withheld_ai,HIGH,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.697,0.697,0.0
-C007,code_review,disagreement_prompt,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,15.0,6.5,8.4,85.1,0.279,0.0295,0.8,0.8295,507.6
-C008,code_review,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),126,28.1,5.9,22.2,92.8,0.3043,0.0322,0.609,0.6412,872.4
-C009,code_review,blind_first,HIGH,confidence_calibration_feedback,0,0.0,27.0,-27.0,0.0,0.0,0.0,0.817,0.817,0.0
-C010,code_review,withheld_ai,HIGH,forced_blind_cases + disagreement_prompts + workload_rebalancing,263,50.2,13.1,37.1,192.3,0.6308,0.0667,0.697,0.7637,752.3
-C011,code_review,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-C012,code_review,control_always_ai,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.609,0.609,inf
-C013,code_review,blind_first,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),133,58.4,3.1,55.3,97.3,0.3192,0.0337,0.817,0.8507,1730.6
-C014,code_review,withheld_ai,HIGH,confidence_calibration_feedback,0,0.0,50.0,-50.0,0.0,0.0,0.0,0.697,0.697,0.0
-C015,code_review,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R000,chest_xray_triage,control_always_ai,LOW,confidence_calibration_feedback,0,0.0,18.0,-18.0,0.0,0.0,0.0,0.609,0.609,0.0
-R001,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R002,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),120,18.6,6.5,12.2,89.9,0.2949,0.0312,0.697,0.7282,598.2
-R003,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R004,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),120,21.9,5.9,16.0,87.5,0.287,0.0303,0.609,0.6393,721.9
-R005,chest_xray_triage,blind_first,HIGH,confidence_calibration_feedback,0,0.0,28.0,-28.0,0.0,0.0,0.0,0.817,0.817,0.0
-R006,chest_xray_triage,withheld_ai,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
-R007,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R008,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),130,19.9,6.9,13.0,96.1,0.3151,0.0333,0.609,0.6423,597.9
-R009,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R010,chest_xray_triage,withheld_ai,HIGH,forced_blind_cases + disagreement_prompts + workload_rebalancing,247,62.7,10.3,52.4,179.4,0.5886,0.0622,0.697,0.7592,1007.9
-R011,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R012,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),130,22.4,6.7,15.7,96.4,0.3162,0.0334,0.609,0.6424,670.2
-R013,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R014,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),101,13.9,5.6,8.2,75.4,0.2472,0.0261,0.697,0.7231,530.4
-R015,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R016,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),123,21.3,6.4,14.9,92.2,0.3024,0.032,0.609,0.641,666.3
-R017,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R018,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,26.1,4.8,21.3,80.7,0.2647,0.028,0.697,0.725,934.5
-R019,chest_xray_triage,disagreement_prompt,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),123,14.1,7.2,6.9,92.3,0.3029,0.032,0.8,0.832,441.3
-R020,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),136,28.1,6.5,21.6,100.6,0.3299,0.0349,0.609,0.6439,807.1
-R021,chest_xray_triage,blind_first,LOW,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.817,0.817,0.0
-R022,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),104,11.5,5.9,5.5,76.2,0.2499,0.0264,0.697,0.7234,433.7
-R023,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
-R024,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),133,41.2,5.0,36.2,98.8,0.3241,0.0343,0.609,0.6433,1202.9
-R025,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R026,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),102,9.3,6.1,3.2,75.1,0.2462,0.026,0.697,0.723,356.2
-R027,chest_xray_triage,disagreement_prompt,HIGH,confidence_calibration_feedback,0,0.0,39.0,-39.0,0.0,0.0,0.0,0.8,0.8,0.0
-R028,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),134,16.4,7.7,8.7,100.4,0.3292,0.0348,0.609,0.6438,470.9
-R029,chest_xray_triage,blind_first,LOW,confidence_calibration_feedback,0,0.0,20.0,-20.0,0.0,0.0,0.0,0.817,0.817,0.0
-R030,chest_xray_triage,withheld_ai,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
-R031,chest_xray_triage,disagreement_prompt,HIGH,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.8,0.8,0.0
-R032,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),127,33.4,5.3,28.1,93.6,0.307,0.0324,0.609,0.6414,1030.7
-R033,chest_xray_triage,blind_first,LOW,confidence_calibration_feedback,0,0.0,21.0,-21.0,0.0,0.0,0.0,0.817,0.817,0.0
-R034,chest_xray_triage,withheld_ai,HIGH,confidence_calibration_feedback,0,0.0,42.0,-42.0,0.0,0.0,0.0,0.697,0.697,0.0
-R035,chest_xray_triage,disagreement_prompt,LOW,confidence_calibration_feedback,0,0.0,20.0,-20.0,0.0,0.0,0.0,0.8,0.8,0.0
-R036,chest_xray_triage,control_always_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),127,37.3,5.1,32.1,96.1,0.3151,0.0333,0.609,0.6423,1119.7
-R037,chest_xray_triage,blind_first,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),131,42.7,4.7,38.0,97.1,0.3185,0.0337,0.817,0.8507,1268.6
-R038,chest_xray_triage,withheld_ai,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,11.7,6.6,5.0,83.7,0.2745,0.029,0.697,0.726,402.1
-R039,chest_xray_triage,disagreement_prompt,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),135,15.3,7.8,7.5,100.5,0.3296,0.0348,0.8,0.8348,438.9
-R040,chest_xray_triage,control_always_ai,LOW,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.609,0.609,0.0
-R041,chest_xray_triage,blind_first,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
-R042,chest_xray_triage,withheld_ai,LOW,confidence_calibration_feedback,0,0.0,15.0,-15.0,0.0,0.0,0.0,0.697,0.697,0.0
-R043,chest_xray_triage,disagreement_prompt,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+reviewer_id,domain,arm,reliance_class,risk_level,intervention_type,n_cases_affected_total,n_cases_made_worse,n_cases_made_better,net_wrong_cases_added,n_practice_reps_gained,skill_gain_units,exam_acc_gain_est,arm_exam_baseline,projected_exam_with_intv,cost_per_exam_point
+C000,code_review,control_always_ai,UNDER,HIGH,confidence_calibration_feedback,0,0.0,29.0,-29.0,0.0,0.0,0.0,0.609,0.609,0.0
+C001,code_review,blind_first,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),122,22.6,6.1,16.5,88.5,0.2901,0.0307,0.817,0.8477,737.0
+C002,code_review,withheld_ai,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
+C003,code_review,disagreement_prompt,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),131,39.8,5.2,34.6,98.7,0.3239,0.0342,0.8,0.8342,1162.6
+C004,code_review,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),132,34.0,5.9,28.1,98.9,0.3243,0.0343,0.609,0.6433,990.9
+C005,code_review,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+C006,code_review,withheld_ai,UNDER,HIGH,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.697,0.697,0.0
+C007,code_review,disagreement_prompt,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,15.0,6.5,8.4,85.1,0.279,0.0295,0.8,0.8295,507.6
+C008,code_review,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),126,28.1,5.9,22.2,92.8,0.3043,0.0322,0.609,0.6412,872.4
+C009,code_review,blind_first,UNDER,HIGH,confidence_calibration_feedback,0,0.0,27.0,-27.0,0.0,0.0,0.0,0.817,0.817,0.0
+C010,code_review,withheld_ai,OVER,HIGH,forced_blind_cases + disagreement_prompts + workload_rebalancing,263,50.2,13.1,37.1,192.3,0.6308,0.0667,0.697,0.7637,752.3
+C011,code_review,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+C012,code_review,control_always_ai,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.609,0.609,inf
+C013,code_review,blind_first,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),133,58.4,3.1,55.3,97.3,0.3192,0.0337,0.817,0.8507,1730.6
+C014,code_review,withheld_ai,UNDER,HIGH,confidence_calibration_feedback,0,0.0,50.0,-50.0,0.0,0.0,0.0,0.697,0.697,0.0
+C015,code_review,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R000,chest_xray_triage,control_always_ai,UNDER,LOW,confidence_calibration_feedback,0,0.0,18.0,-18.0,0.0,0.0,0.0,0.609,0.609,0.0
+R001,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R002,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),120,18.6,6.5,12.2,89.9,0.2949,0.0312,0.697,0.7282,598.2
+R003,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R004,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),120,21.9,5.9,16.0,87.5,0.287,0.0303,0.609,0.6393,721.9
+R005,chest_xray_triage,blind_first,UNDER,HIGH,confidence_calibration_feedback,0,0.0,28.0,-28.0,0.0,0.0,0.0,0.817,0.817,0.0
+R006,chest_xray_triage,withheld_ai,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
+R007,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R008,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),130,19.9,6.9,13.0,96.1,0.3151,0.0333,0.609,0.6423,597.9
+R009,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R010,chest_xray_triage,withheld_ai,OVER,HIGH,forced_blind_cases + disagreement_prompts + workload_rebalancing,247,62.7,10.3,52.4,179.4,0.5886,0.0622,0.697,0.7592,1007.9
+R011,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R012,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),130,22.4,6.7,15.7,96.4,0.3162,0.0334,0.609,0.6424,670.2
+R013,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R014,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),101,13.9,5.6,8.2,75.4,0.2472,0.0261,0.697,0.7231,530.4
+R015,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R016,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),123,21.3,6.4,14.9,92.2,0.3024,0.032,0.609,0.641,666.3
+R017,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R018,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,26.1,4.8,21.3,80.7,0.2647,0.028,0.697,0.725,934.5
+R019,chest_xray_triage,disagreement_prompt,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),123,14.1,7.2,6.9,92.3,0.3029,0.032,0.8,0.832,441.3
+R020,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),136,28.1,6.5,21.6,100.6,0.3299,0.0349,0.609,0.6439,807.1
+R021,chest_xray_triage,blind_first,UNDER,LOW,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.817,0.817,0.0
+R022,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),104,11.5,5.9,5.5,76.2,0.2499,0.0264,0.697,0.7234,433.7
+R023,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf
+R024,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),133,41.2,5.0,36.2,98.8,0.3241,0.0343,0.609,0.6433,1202.9
+R025,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R026,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),102,9.3,6.1,3.2,75.1,0.2462,0.026,0.697,0.723,356.2
+R027,chest_xray_triage,disagreement_prompt,UNDER,HIGH,confidence_calibration_feedback,0,0.0,39.0,-39.0,0.0,0.0,0.0,0.8,0.8,0.0
+R028,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),134,16.4,7.7,8.7,100.4,0.3292,0.0348,0.609,0.6438,470.9
+R029,chest_xray_triage,blind_first,UNDER,LOW,confidence_calibration_feedback,0,0.0,20.0,-20.0,0.0,0.0,0.0,0.817,0.817,0.0
+R030,chest_xray_triage,withheld_ai,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.697,0.697,inf
+R031,chest_xray_triage,disagreement_prompt,UNDER,HIGH,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.8,0.8,0.0
+R032,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),127,33.4,5.3,28.1,93.6,0.307,0.0324,0.609,0.6414,1030.7
+R033,chest_xray_triage,blind_first,UNDER,LOW,confidence_calibration_feedback,0,0.0,21.0,-21.0,0.0,0.0,0.0,0.817,0.817,0.0
+R034,chest_xray_triage,withheld_ai,UNDER,HIGH,confidence_calibration_feedback,0,0.0,42.0,-42.0,0.0,0.0,0.0,0.697,0.697,0.0
+R035,chest_xray_triage,disagreement_prompt,UNDER,LOW,confidence_calibration_feedback,0,0.0,20.0,-20.0,0.0,0.0,0.0,0.8,0.8,0.0
+R036,chest_xray_triage,control_always_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),127,37.3,5.1,32.1,96.1,0.3151,0.0333,0.609,0.6423,1119.7
+R037,chest_xray_triage,blind_first,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),131,42.7,4.7,38.0,97.1,0.3185,0.0337,0.817,0.8507,1268.6
+R038,chest_xray_triage,withheld_ai,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),112,11.7,6.6,5.0,83.7,0.2745,0.029,0.697,0.726,402.1
+R039,chest_xray_triage,disagreement_prompt,WATCH,MEDIUM,forced_blind_cases (light) + disagreement_prompts (targeted),135,15.3,7.8,7.5,100.5,0.3296,0.0348,0.8,0.8348,438.9
+R040,chest_xray_triage,control_always_ai,UNDER,LOW,confidence_calibration_feedback,0,0.0,22.0,-22.0,0.0,0.0,0.0,0.609,0.609,0.0
+R041,chest_xray_triage,blind_first,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.817,0.817,inf
+R042,chest_xray_triage,withheld_ai,UNDER,LOW,confidence_calibration_feedback,0,0.0,15.0,-15.0,0.0,0.0,0.0,0.697,0.697,0.0
+R043,chest_xray_triage,disagreement_prompt,APPROPRIATE,LOW,none,0,0.0,0.0,0.0,0.0,0.0,0.0,0.8,0.8,inf

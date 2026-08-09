@@ -151,7 +151,7 @@ size, reported as such rather than oversold.
 | | File | Grain | What it is |
 |---|---|---|---|
 | D1 | [`D1_capability_estimates.csv`](D1_capability_estimates.csv) | 60 reviewers | Current (most-recent-week) capability estimate + interval |
-| D2 | `out/intervention_policy.csv` | 60 reviewers | Who's flagged, what intervention, why (B.2) |
+| D2 | [`D2_intervention_assignments.csv`](D2_intervention_assignments.csv) / [`.md`](D2_intervention_assignments.md) | 60 reviewers | Who's flagged, what intervention, why (B.2) |
 | D3 | [`D3_predicted_week25_accuracy.csv`](D3_predicted_week25_accuracy.csv) | 60 reviewers | Forecast unassisted accuracy if tested next week, with interval |
 | D4 | [`D4_cost_account.csv`](D4_cost_account.csv) / [`.md`](D4_cost_account.md) | 60 reviewers + aggregate | Cost (cases made worse) and benefit (skill preserved), kept separate |
 
@@ -169,13 +169,17 @@ true exam accuracy, across 5 independently-generated seeds — see
 ## The dashboard
 
 [`dashboard.html`](dashboard.html) is the single-page view of everything above — reads
-only pipeline outputs (`handoff_table.csv`, D3, self-validation seeds, `out/intervention_policy.csv`,
-`D4_cost_account.csv`), never the raw event log. Four panels, filterable by arm/domain:
-capability trajectories with interval bands, B.2 intervention assignments, D3 predictions
-plus the self-validation ρ distribution, and the D4 cost/benefit shown as two genuinely
-separate charts. Plain HTML + hand-rolled SVG (no CDN dependency, works offline).
-Data is prepared by `build_dashboard_data.py` → `dashboard_data.js`; rerun it after any
-pipeline stage changes to refresh the dashboard.
+only the packaged deliverables (`handoff_table.csv`, D2, D3, self-validation seeds,
+`D4_cost_account.csv`), never the raw event log or `out/` intermediates directly. Four
+panels, filterable by arm/domain: capability trajectories with interval bands, D2
+intervention assignments, D3 predictions plus the self-validation ρ distribution, and
+the D4 cost/benefit shown as two genuinely separate charts (grouped by reliance-class ×
+risk-tier, not risk-tier alone — otherwise a HIGH-risk over-reliant reviewer's real cost
+gets averaged together with a HIGH-risk under-reliant reviewer's zero cost into one
+misleading row). Plain HTML + hand-rolled SVG (no CDN dependency, works offline).
+Data is prepared by `build_dashboard_data.py` → `dashboard_data.js`; rerun
+`package_deliverables.py` then `build_dashboard_data.py` after any pipeline stage
+changes to refresh the dashboard.
 
 ---
 
@@ -222,6 +226,7 @@ directory, never overwriting the real `public/`/`answer_key/`).
 |---|---|
 | [PROGRESS_REPORT.md](PROGRESS_REPORT.md) | A.1–A.5 build log, every number, every dead end and fix |
 | [REPORT_FOR_PERSON_B.md](REPORT_FOR_PERSON_B.md) | Handoff summary: what D1–D4 mean, how reliable, what not to do with them |
+| [D2_intervention_assignments.md](D2_intervention_assignments.md) | B.2 policy: state distribution, the under-reliant routing rule, what risk_score means |
 | [D4_cost_account.md](D4_cost_account.md) | The B.3 cost/benefit trade-off, stated plainly |
 | [out/b3_stretch_real_incidents.md](out/b3_stretch_real_incidents.md) | Real aviation-safety incidents matching the ledger's over-reliance failure mode |
 | [A4_STRETCH_CHESTXRAY14.md](A4_STRETCH_CHESTXRAY14.md) | External validation on real NIH chest x-rays — partial generalization, mechanism identified |

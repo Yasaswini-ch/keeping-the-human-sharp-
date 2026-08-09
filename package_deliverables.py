@@ -1,9 +1,22 @@
 """
-PS-I5: package D1 and D4 as explicit standalone deliverables.
+PS-I5: package D1, D2, and D4 as explicit standalone deliverables.
 
 D1: one row per reviewer = their MOST RECENT week's capability_estimate,
 interval_lo, interval_hi. Not the full trajectory (that's handoff_table.csv)
 -- this is "where do things stand right now."
+
+D2: B.2's intervention assignment per reviewer -- who's flagged, what
+intervention, why. out/intervention_policy.csv already has this (the
+trajectory-derived reasoning fields: capability_slope_per_week, risk_score,
+the four flags, plus the full intervention_detail/stop_condition text) but
+it lives in out/ without the D#-prefixed naming D1/D3/D4 have and was never
+packaged as a standalone deliverable the way those were -- this closes that
+gap. (out/intervention_assignments.csv is the OTHER B.2 output -- narrower
+reasoning fields, but re-carries capability_estimate/interval/deferred_rate/
+committed_rate/blind_sample_n, which already live in D1 and handoff_table.csv
+at finer grain. D2 packages intervention_policy.csv specifically because
+that's the one with the actual "why", and it's what the dashboard's B.2
+panel already reads.)
 
 D4: cost_ledger.py's per-reviewer output already keeps cost (cases made
 worse/better) and benefit (skill/exam-accuracy gain) as separate columns --
@@ -17,6 +30,7 @@ through out/cost_ledger_narrative.txt's full ~200-line account.
 """
 import csv
 import statistics
+from collections import Counter
 
 
 def read_csv(path):
@@ -65,13 +79,88 @@ if len(weeks_seen) > 1:
           "each row genuinely is that reviewer's own latest, not a global slice.")
 
 # =============================================================================
+# D2: intervention assignment per reviewer -- who's flagged, what, why
+# =============================================================================
+policy = read_csv("out/intervention_policy.csv")
+assert len(policy) == 60, f"expected 60 reviewers in intervention policy, got {len(policy)}"
+
+D2_COLS = [
+    "reviewer_id", "domain", "arm",
+    # why -- the trajectory-derived features the policy actually decided on
+    "capability_slope_per_week", "capability_drop_wk1_4_to_wk21_24",
+    "recent_interval_width", "recent_deferred_rate",
+    "under_reliance_rate", "appropriate_skepticism_rate", "over_reliance_rate",
+    "flag_declining", "flag_wide_interval", "flag_high_deferred", "flag_under_reliant",
+    "risk_score", "state",
+    # what
+    "intervention", "intervention_detail", "frequency", "stop_condition",
+]
+d2_rows = [{c: r[c] for c in D2_COLS} for r in policy]
+d2_rows.sort(key=lambda r: r["reviewer_id"])
+write_csv("D2_intervention_assignments.csv", d2_rows, D2_COLS)
+
+state_counts = Counter(r["state"] for r in d2_rows)
+print(f"D2_intervention_assignments.csv: {len(d2_rows)} reviewers, "
+      f"state distribution: {dict(state_counts)}")
+
+md = f"""# D2 — Intervention Assignments: Who, What, Why
+
+Per-reviewer output of the B.2 policy (`intervention_policy.py`), run against the real
+A.5 capability trajectory (`handoff_table.csv`) and B.1's reliance classification
+(`out/reliance_by_reviewer.csv`) -- not a mock. Full detail, including the free-text
+rationale and stop condition for each reviewer: [`D2_intervention_assignments.csv`](D2_intervention_assignments.csv).
+
+## State distribution
+
+| State | n reviewers | What it means |
+|---|---|---|
+| healthy | {state_counts.get('healthy', 0)} | No flags triggered -- no intervention |
+| watch | {state_counts.get('watch', 0)} | Declining and/or high-deferral signal, not yet at the highest risk tier |
+| under_reliant | {state_counts.get('under_reliant', 0)} | Overrides correct AI recommendations -- skill is fine, trust calibration isn't |
+| over_reliance_risk | {state_counts.get('over_reliance_risk', 0)} | Highest risk tier: declining, wide interval, and high deferral together |
+
+## The design rule that shapes every assignment
+
+Two things have to both be true before a reviewer is pushed toward more independent
+judgment: they look like they're losing skill (declining capability trend, or a wide
+enough interval that we're genuinely unsure), **and** they're currently leaning on the
+AI heavily. A reviewer who's already independent doesn't need more forced-blind cases
+regardless of how their capability trend looks -- there's nothing to correct.
+
+**Under-reliant reviewers are routed differently, not just less severely.** Per the
+README's own framing ("assisted accuracy is lower while their skill is preserved"),
+forcing more independent judgment onto someone who already over-practices it doesn't
+help and just costs more assisted accuracy for no benefit. They get
+`confidence_calibration_feedback` instead -- shown their own override cases where the
+AI was actually correct, paired with the calibration curve (`out/calibration_curve.csv`)
+-- targeting the trust-calibration problem directly rather than treating it as a
+milder version of over-reliance.
+
+## Risk score and flags
+
+`risk_score` (0-3) sums four binary flags: `flag_declining` (negative capability
+slope or trend), `flag_wide_interval` (uncertain, not just declining), `flag_high_deferred`
+(leaning on the AI heavily right now), and `flag_under_reliant` (routed to calibration
+instead, regardless of the other three). The `state` and `intervention` columns are the
+policy's actual output; `risk_score` and the individual flags are there so the *why*
+behind each assignment is auditable, not just the *what*.
+
+This is a repackaging of `out/intervention_policy.csv` into a standalone, D#-prefixed
+deliverable matching D1/D3/D4's treatment -- the underlying data and policy logic are
+unchanged, this just gives it the same standalone footing at the repo root.
+"""
+with open("D2_intervention_assignments.md", "w", encoding="utf-8") as f_out:
+    f_out.write(md)
+print(f"D2_intervention_assignments.md written ({len(md.splitlines())} lines)")
+
+# =============================================================================
 # D4: cost account, explicit separated cost/benefit columns
 # =============================================================================
 ledger = read_csv("out/cost_ledger_per_reviewer.csv")
 assert len(ledger) == 60, f"expected 60 reviewers in cost ledger, got {len(ledger)}"
 
 D4_COLS = [
-    "reviewer_id", "domain", "arm", "risk_level", "intervention_type",
+    "reviewer_id", "domain", "arm", "reliance_class", "risk_level", "intervention_type",
     # cost side
     "n_cases_affected_total", "n_cases_made_worse", "n_cases_made_better", "net_wrong_cases_added",
     # benefit side
@@ -102,9 +191,20 @@ mean_exam_gain = statistics.mean(f(r["exam_acc_gain_est"]) for r in d4_rows)
 n_over_high = sum(1 for r in ledger if r["risk_level"] == "HIGH" and r["reliance_class"] == "OVER")
 n_intervened_worse = sum(1 for r in d4_rows if f(r["n_cases_made_worse"]) > 0)
 
+# Grouped by (reliance_class, risk_level), NOT risk_level alone: risk_level
+# "HIGH" on its own blends OVER/HIGH (real AI-withholding cost) with
+# UNDER/HIGH (zero cost by policy design -- under-reliant reviewers never
+# have AI withheld). Collapsing those together produced a "HIGH" row that
+# showed both large cost AND large benefit simultaneously, which reads as
+# a much bigger cost/benefit tangle than what's actually happening: the
+# real over-reliance cost is concentrated in a small OVER/HIGH group, and
+# under-reliant reviewers' "benefit" is a completely separate, cost-free
+# mechanism (calibration fixing existing wrong-due-to-override cases, not
+# forced independent judgment). Keeping reliance_class in the group key
+# matches out/cost_ledger_narrative.txt's own grouping and avoids that.
 by_risk = {}
 for r in d4_rows:
-    k = r["risk_level"]
+    k = f"{r['reliance_class']} / {r['risk_level']}"
     by_risk.setdefault(k, {"n": 0, "worse": 0.0, "better": 0.0, "skill": 0.0, "exam_gain": []})
     by_risk[k]["n"] += 1
     by_risk[k]["worse"] += f(r["n_cases_made_worse"])
@@ -128,9 +228,13 @@ Full derivation and per-group breakdown: [`out/cost_ledger_narrative.txt`](out/c
 
 These are never combined into one score in this deliverable. `cost_per_exam_point` is reported as an *additional* ratio in the CSV for reference, not as a replacement for the two rows above.
 
-## By risk tier
+## By reliance class / risk tier
 
-| Risk tier | n reviewers | Cases made worse | Cases made better | Skill-gain units |
+Grouped this way, not by risk_level alone, specifically so a HIGH-risk over-reliant
+reviewer (real cost) is never averaged together with a HIGH-risk under-reliant one
+(zero cost by design) into one misleading row.
+
+| Group | n reviewers | Cases made worse | Cases made better | Skill-gain units |
 |---|---|---|---|---|
 """ + "\n".join(
         f"| {tier} | {v['n']} | {v['worse']:,.1f} | {v['better']:,.1f} | {v['skill']:,.2f} |"

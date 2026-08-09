@@ -14,13 +14,19 @@ Full derivation and per-group breakdown: [`out/cost_ledger_narrative.txt`](out/c
 
 These are never combined into one score in this deliverable. `cost_per_exam_point` is reported as an *additional* ratio in the CSV for reference, not as a replacement for the two rows above.
 
-## By risk tier
+## By reliance class / risk tier
 
-| Risk tier | n reviewers | Cases made worse | Cases made better | Skill-gain units |
+Grouped this way, not by risk_level alone, specifically so a HIGH-risk over-reliant
+reviewer (real cost) is never averaged together with a HIGH-risk under-reliant one
+(zero cost by design) into one misleading row.
+
+| Group | n reviewers | Cases made worse | Cases made better | Skill-gain units |
 |---|---|---|---|---|
-| HIGH | 10 | 112.9 | 282.4 | 1.22 |
-| LOW | 26 | 0.0 | 138.0 | 0.00 |
-| MEDIUM | 24 | 603.0 | 143.4 | 7.20 |
+| APPROPRIATE / LOW | 19 | 0.0 | 0.0 | 0.00 |
+| OVER / HIGH | 2 | 112.9 | 23.4 | 1.22 |
+| UNDER / HIGH | 8 | 0.0 | 259.0 | 0.00 |
+| UNDER / LOW | 7 | 0.0 | 138.0 | 0.00 |
+| WATCH / MEDIUM | 24 | 603.0 | 143.4 | 7.20 |
 
 ## The trade-off, stated plainly
 
