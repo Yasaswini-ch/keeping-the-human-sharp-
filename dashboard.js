@@ -6,10 +6,17 @@ const ARMS = ["blind_first", "control_always_ai", "disagreement_prompt", "withhe
 const ARM_VAR = { blind_first: "--series-1", control_always_ai: "--series-2", disagreement_prompt: "--series-3", withheld_ai: "--series-4" };
 const DOMAINS = ["chest_xray_triage", "code_review"];
 const STATUS = {
-  healthy: { color: "--status-good", label: "healthy" },
-  watch: { color: "--status-warning", label: "watch" },
-  under_reliant: { color: "--status-serious", label: "under-reliant" },
-  over_reliance_risk: { color: "--status-critical", label: "over-reliance risk" },
+  healthy: { color: "--status-good", label: "healthy", desc: "no warning signs — no action needed" },
+  watch: { color: "--status-warning", label: "watch", desc: "some warning signs, not the highest tier — light-touch nudge toward more independent practice" },
+  under_reliant: { color: "--status-serious", label: "under-reliant", desc: "skill is fine, but they distrust the AI even when it's right — gets confidence-building feedback, not more independent work" },
+  over_reliance_risk: { color: "--status-critical", label: "over-reliance risk", desc: "declining skill AND leaning on the AI heavily — the group that most needs forced independent practice" },
+};
+const GROUP_DESC = {
+  "OVER / HIGH": "Skill declining, leans on AI heavily — real cost, real benefit.",
+  "UNDER / HIGH": "Distrusts a correct AI often — zero cost (no AI withheld), pure benefit from calibration.",
+  "UNDER / LOW": "Same as above, milder — zero cost, pure benefit from calibration.",
+  "WATCH / MEDIUM": "Early warning signs — moderate cost, moderate benefit.",
+  "APPROPRIATE / LOW": "No flags triggered — no cost, no benefit, nothing to do.",
 };
 
 function cssVar(name) {
@@ -21,6 +28,61 @@ function svgEl(tag, attrs) {
   const e = document.createElementNS(SVG_NS, tag);
   for (const k in attrs) e.setAttribute(k, attrs[k]);
   return e;
+}
+// Catmull-Rom -> cubic Bezier smoothed path through a point list, for a
+// fluid curve instead of straight polyline segments. `move` true starts
+// with M, false continues with L into an existing subpath (used to build
+// closed band shapes out of two smoothed edges).
+function smoothPathD(points, move) {
+  if (points.length < 2) return "";
+  const p = points;
+  let d = (move === false ? "L" : "M") + `${p[0].x.toFixed(1)},${p[0].y.toFixed(1)}`;
+  for (let i = 0; i < p.length - 1; i++) {
+    const p0 = p[i - 1] || p[i];
+    const p1 = p[i];
+    const p2 = p[i + 1];
+    const p3 = p[i + 2] || p2;
+    const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+  }
+  return d;
+}
+let defsInjected = new WeakSet();
+function ensureDefs(svg) {
+  if (defsInjected.has(svg)) return svg.querySelector("defs");
+  const defs = svgEl("defs", {});
+  svg.insertBefore(defs, svg.firstChild);
+  defsInjected.add(svg);
+  return defs;
+}
+function addSoftShadowFilter(defs, id, color, deviation, dy) {
+  const filter = svgEl("filter", { id, x: "-60%", y: "-60%", width: "220%", height: "220%" });
+  filter.appendChild(svgEl("feDropShadow", {
+    dx: 0, dy: dy !== undefined ? dy : 1.5, stdDeviation: deviation !== undefined ? deviation : 2.5,
+    "flood-color": color, "flood-opacity": 0.45,
+  }));
+  defs.appendChild(filter);
+}
+function addLinearGradient(defs, id, colorVar, x1, y1, x2, y2, stops) {
+  const grad = svgEl("linearGradient", { id, x1, y1, x2, y2, gradientUnits: "userSpaceOnUse" });
+  (stops || [[0, 0.32], [1, 0.02]]).forEach(([offset, opacity]) => {
+    grad.appendChild(svgEl("stop", { offset, "stop-color": colorVar, "stop-opacity": opacity }));
+  });
+  defs.appendChild(grad);
+  return `url(#${id})`;
+}
+// Glossy-bar sheen: light tint at the top fading to the base color at the
+// bottom, both near-opaque -- a lightness gradient, not a fade-to-transparent
+// one, so it reads as a highlight catching light rather than the bar
+// dissolving.
+function addBarSheenGradient(defs, id, baseHex, x1, y1, x2, y2) {
+  const grad = svgEl("linearGradient", { id, x1, y1, x2, y2, gradientUnits: "userSpaceOnUse" });
+  grad.appendChild(svgEl("stop", { offset: 0, style: `stop-color: color-mix(in srgb, ${baseHex} 62%, white)` }));
+  grad.appendChild(svgEl("stop", { offset: 0.45, style: `stop-color: ${baseHex}` }));
+  grad.appendChild(svgEl("stop", { offset: 1, style: `stop-color: color-mix(in srgb, ${baseHex} 82%, black)` }));
+  defs.appendChild(grad);
+  return `url(#${id})`;
 }
 function el(tag, attrs, text) {
   const e = document.createElement(tag);
@@ -66,6 +128,22 @@ function showTooltip(x, y, html) {
   tooltipEl.classList.add("show");
 }
 function hideTooltip() { tooltipEl.classList.remove("show"); }
+
+// Plain-language glossary "i" icons, wired once via event delegation so they
+// work regardless of when/how the surrounding static HTML was inserted.
+// Reuses the same tooltip element the charts use, so hovering a chart mark
+// and hovering a glossary icon feel like the same mechanism, not two.
+document.addEventListener("mouseover", (e) => {
+  const icon = e.target.closest && e.target.closest(".info-icon[data-tip]");
+  if (!icon) return;
+  const tt = document.createDocumentFragment();
+  tt.appendChild(el("div", { style: "max-width:240px; font-weight:400;" }, icon.getAttribute("data-tip")));
+  const rect = icon.getBoundingClientRect();
+  showTooltip(rect.left, rect.bottom, tt);
+});
+document.addEventListener("mouseout", (e) => {
+  if (e.target.closest && e.target.closest(".info-icon[data-tip]")) hideTooltip();
+});
 function ttTitle(text) { const d = el("div", { class: "tt-title" }, text); return d; }
 function ttRow(keyColor, label, value) {
   const row = el("div", { class: "tt-row" });
@@ -116,7 +194,10 @@ function renderFilters() {
   ARMS.forEach((arm) => {
     const active = state.arms.has(arm);
     const btn = el("button", { class: "toggle-btn" + (active ? " active" : ""), type: "button" });
-    if (active) btn.style.background = `var(${ARM_VAR[arm]})`;
+    if (active) {
+      btn.style.setProperty("--_tint", `var(${ARM_VAR[arm]})`);
+      btn.style.background = `linear-gradient(155deg, color-mix(in srgb, var(${ARM_VAR[arm]}) 100%, white 14%), var(${ARM_VAR[arm]}))`;
+    }
     btn.appendChild(el("span", { class: "sw", style: active ? "" : `color:var(${ARM_VAR[arm]})` }));
     btn.appendChild(document.createTextNode(arm.replace(/_/g, " ")));
     btn.addEventListener("click", () => {
@@ -172,6 +253,9 @@ function renderTrajLegend() {
 function renderTrajectory() {
   const svg = document.getElementById("trajChart");
   svg.innerHTML = "";
+  defsInjected.delete(svg);
+  const defs = ensureDefs(svg);
+  addSoftShadowFilter(defs, "trajLineShadow", "rgba(20,20,30,0.35)", 3, 2);
   const W = 980, H = 320, M = { l: 46, r: 16, t: 14, b: 30 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
 
@@ -217,7 +301,8 @@ function renderTrajectory() {
     if (rid === state.selectedReviewer) return;
     const rows = byReviewer[rid]; if (!rows || !rows.length) return;
     const arm = DATA.reviewers[rid].arm;
-    const d = rows.map((r, i) => `${i === 0 ? "M" : "L"}${xScale(r.week).toFixed(1)},${yScale(r.capability_estimate).toFixed(1)}`).join(" ");
+    const pts = rows.map((r) => ({ x: xScale(r.week), y: yScale(r.capability_estimate) }));
+    const d = smoothPathD(pts);
     const path = svgEl("path", { d, fill: "none", style: `stroke:var(${ARM_VAR[arm]});stroke-width:1;opacity:0.22`, "stroke-linecap": "round" });
     path.addEventListener("mouseenter", (e) => {
       const box = svg.getBoundingClientRect();
@@ -237,25 +322,36 @@ function renderTrajectory() {
   if (selRows && selRows.length) {
     const arm = DATA.reviewers[state.selectedReviewer].arm;
     const colorVar = `var(${ARM_VAR[arm]})`;
-    const top = selRows.map((r, i) => `${i === 0 ? "M" : "L"}${xScale(r.week).toFixed(1)},${yScale(r.interval_hi).toFixed(1)}`).join(" ");
-    const bottom = selRows.slice().reverse().map((r) => `L${xScale(r.week).toFixed(1)},${yScale(r.interval_lo).toFixed(1)}`).join(" ");
-    svg.appendChild(svgEl("path", { d: top + " " + bottom + " Z", style: `fill:${colorVar};opacity:0.10`, stroke: "none" }));
+    const armHex = cssVar(ARM_VAR[arm]) || colorVar;
+    const bandFill = addLinearGradient(defs, "trajBandFill", armHex, 0, M.t, 0, M.t + plotH, [[0, 0.22], [1, 0.02]]);
 
-    const line = selRows.map((r, i) => `${i === 0 ? "M" : "L"}${xScale(r.week).toFixed(1)},${yScale(r.capability_estimate).toFixed(1)}`).join(" ");
-    svg.appendChild(svgEl("path", { d: line, fill: "none", style: `stroke:${colorVar};stroke-width:2`, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    const topPts = selRows.map((r) => ({ x: xScale(r.week), y: yScale(r.interval_hi) }));
+    const bottomPts = selRows.slice().reverse().map((r) => ({ x: xScale(r.week), y: yScale(r.interval_lo) }));
+    const bandD = smoothPathD(topPts) + " " + smoothPathD(bottomPts, false) + " Z";
+    svg.appendChild(svgEl("path", { d: bandD, style: `fill:${bandFill}`, stroke: "none" }));
+
+    const linePts = selRows.map((r) => ({ x: xScale(r.week), y: yScale(r.capability_estimate) }));
+    const line = smoothPathD(linePts);
+    svg.appendChild(svgEl("path", {
+      d: line, fill: "none", style: `stroke:${colorVar};stroke-width:2.75`, "stroke-linecap": "round", "stroke-linejoin": "round",
+      filter: "url(#trajLineShadow)",
+    }));
 
     selRows.forEach((r) => {
       const cx = xScale(r.week), cy = yScale(r.capability_estimate);
-      const dot = svgEl("circle", { cx, cy, r: 4.5, style: `fill:${colorVar}`, stroke: cssVar("--surface-1"), "stroke-width": 2 });
+      const dot = svgEl("circle", {
+        cx, cy, r: 4.5, style: `fill:${colorVar}`, stroke: cssVar("--surface-solid"), "stroke-width": 2,
+        filter: "url(#trajLineShadow)",
+      });
       const hit = svgEl("circle", { cx, cy, r: 12, fill: "transparent", style: "cursor:pointer" });
       hit.addEventListener("mouseenter", (e) => {
         const tt = document.createDocumentFragment();
         tt.appendChild(ttTitle(`${state.selectedReviewer} · week ${r.week}`));
-        tt.appendChild(ttRow(colorVar, "capability_estimate", fmt(r.capability_estimate, 3)));
-        tt.appendChild(ttRow(null, "95% interval", `[${fmt(r.interval_lo, 2)}, ${fmt(r.interval_hi, 2)}]`));
-        tt.appendChild(ttRow(null, "deferred_rate", pct(r.deferred_rate, 0)));
-        tt.appendChild(ttRow(null, "committed_rate", pct(r.committed_rate, 0)));
-        tt.appendChild(ttRow(null, "blind_sample_n", String(r.blind_sample_n)));
+        tt.appendChild(ttRow(colorVar, "skill score (relative)", fmt(r.capability_estimate, 3)));
+        tt.appendChild(ttRow(null, "95% confidence range", `[${fmt(r.interval_lo, 2)}, ${fmt(r.interval_hi, 2)}]`));
+        tt.appendChild(ttRow(null, "leaned on the AI", pct(r.deferred_rate, 0)));
+        tt.appendChild(ttRow(null, "judged independently", pct(r.committed_rate, 0)));
+        tt.appendChild(ttRow(null, "certain evidence this week", String(r.blind_sample_n)));
         showTooltip(e.clientX, e.clientY, tt);
       });
       hit.addEventListener("mousemove", (e) => { tooltipEl.style.left = (e.clientX + 14) + "px"; tooltipEl.style.top = (e.clientY + 14) + "px"; });
@@ -263,6 +359,39 @@ function renderTrajectory() {
       svg.appendChild(dot); svg.appendChild(hit);
     });
   }
+}
+
+// Table alternative to the trajectory chart, for the same selected reviewer
+// -- same data, plain rows, for anyone who can't easily read an SVG chart.
+function renderTrajTable() {
+  const table = document.getElementById("trajTable");
+  if (!table) return;
+  table.innerHTML = "";
+  const rows = DATA.trajectory
+    .filter((r) => r.reviewer_id === state.selectedReviewer)
+    .slice().sort((a, b) => a.week - b.week);
+
+  const cols = [
+    ["week", "Week"], ["capability_estimate", "Skill score"], ["interval_lo", "Range lo"], ["interval_hi", "Range hi"],
+    ["deferred_rate", "Leaned on AI"], ["committed_rate", "Judged independently"], ["blind_sample_n", "Certain evidence"],
+  ];
+  const thead = el("thead"); const trh = el("tr");
+  cols.forEach(([, label]) => trh.appendChild(el("th", {}, label)));
+  thead.appendChild(trh); table.appendChild(thead);
+
+  const tbody = el("tbody");
+  rows.forEach((r) => {
+    const tr = el("tr");
+    tr.appendChild(el("td", { class: "num" }, String(r.week)));
+    tr.appendChild(el("td", { class: "num" }, fmt(r.capability_estimate, 3)));
+    tr.appendChild(el("td", { class: "num" }, fmt(r.interval_lo, 3)));
+    tr.appendChild(el("td", { class: "num" }, fmt(r.interval_hi, 3)));
+    tr.appendChild(el("td", { class: "num" }, pct(r.deferred_rate, 0)));
+    tr.appendChild(el("td", { class: "num" }, pct(r.committed_rate, 0)));
+    tr.appendChild(el("td", { class: "num" }, String(r.blind_sample_n)));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
 }
 
 // ---------------------------------------------------------------------------
@@ -274,10 +403,25 @@ const B_COLS = [
   { key: "domain", label: "Domain" },
   { key: "state", label: "State" },
   { key: "risk_score", label: "Risk" },
-  { key: "capability_slope_per_week", label: "Slope/wk" },
-  { key: "recent_deferred_rate", label: "Deferred" },
-  { key: "intervention", label: "Intervention" },
+  { key: "capability_slope_per_week", label: "Trend/wk" },
+  { key: "recent_deferred_rate", label: "Leans on AI" },
+  { key: "intervention", label: "Plan" },
 ];
+
+function renderStateGlossary() {
+  const wrap = document.getElementById("stateGlossary");
+  if (!wrap) return;
+  wrap.innerHTML = "";
+  Object.entries(STATUS).forEach(([key, s]) => {
+    const item = el("div", { class: "gk-item" });
+    item.appendChild(el("span", { class: "badge", style: "color:var(--text-primary); background:var(--page-1)" }))
+    const badge = item.lastChild;
+    badge.appendChild(el("span", { class: "dot", style: `background:var(${s.color})` }));
+    badge.appendChild(document.createTextNode(s.label));
+    item.appendChild(document.createTextNode(s.desc));
+    wrap.appendChild(item);
+  });
+}
 
 function renderInterventionTable() {
   const ids = new Set(filteredReviewerIds());
@@ -360,6 +504,9 @@ function renderD3Legend() {
 function renderD3Chart() {
   const svg = document.getElementById("d3Chart");
   svg.innerHTML = "";
+  defsInjected.delete(svg);
+  const defs = ensureDefs(svg);
+  addSoftShadowFilter(defs, "d3DotShadow", "rgba(20,20,30,0.3)", 1.6, 1);
   const W = 980, H = 280, M = { l: 44, r: 16, t: 14, b: 26 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
 
@@ -386,24 +533,71 @@ function renderD3Chart() {
       x1: x, x2: x, y1: yScale(r.predicted_exam_accuracy_lo), y2: yScale(r.predicted_exam_accuracy_hi),
       style: `stroke:${colorVar};stroke-width:1.5;opacity:0.55`,
     }));
-    const dot = svgEl("circle", { cx: x, cy: yScale(r.predicted_exam_accuracy), r: 3.4, style: `fill:${colorVar}` });
+    const dot = svgEl("circle", { cx: x, cy: yScale(r.predicted_exam_accuracy), r: 3.4, style: `fill:${colorVar}`, filter: "url(#d3DotShadow)" });
     const hit = svgEl("circle", { cx: x, cy: yScale(r.predicted_exam_accuracy), r: Math.max(xStep / 2, 6), fill: "transparent", style: "cursor:pointer" });
     hit.addEventListener("mouseenter", (e) => {
       const tt = document.createDocumentFragment();
       tt.appendChild(ttTitle(`${r.reviewer_id} — ${r.arm.replace(/_/g, " ")}`));
       tt.appendChild(ttRow(colorVar, "predicted accuracy", pct(r.predicted_exam_accuracy, 1)));
       tt.appendChild(ttRow(null, "95% interval", `[${pct(r.predicted_exam_accuracy_lo,1)}, ${pct(r.predicted_exam_accuracy_hi,1)}]`));
+      tt.appendChild(el("div", { style: "margin-top:5px; font-size:11px; color:var(--text-muted);" }, "Click to see full history ↑"));
       showTooltip(e.clientX, e.clientY, tt);
     });
     hit.addEventListener("mousemove", (e) => { tooltipEl.style.left = (e.clientX + 14) + "px"; tooltipEl.style.top = (e.clientY + 14) + "px"; });
     hit.addEventListener("mouseleave", hideTooltip);
+    // D3 is already scoped to the same arm/domain filter as Panel A, so any
+    // reviewer clickable here is guaranteed to already be in Panel A's
+    // dropdown -- no filter-mismatch edge case to handle.
+    hit.addEventListener("click", () => {
+      state.selectedReviewer = r.reviewer_id;
+      renderReviewerSelect();
+      renderTrajectory();
+      renderTrajTable();
+      hideTooltip();
+      document.getElementById("panelA").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
     svg.appendChild(dot); svg.appendChild(hit);
   });
+}
+
+// Table alternative to the D3 forecast chart -- same 60 rows, same sort.
+function renderD3Table() {
+  const table = document.getElementById("d3Table");
+  if (!table) return;
+  table.innerHTML = "";
+  const ids = new Set(filteredReviewerIds());
+  const rows = DATA.d3.filter((r) => ids.has(r.reviewer_id)).slice().sort((a, b) => b.predicted_exam_accuracy - a.predicted_exam_accuracy);
+
+  const thead = el("thead"); const trh = el("tr");
+  ["Reviewer", "Arm", "Predicted accuracy", "Range lo", "Range hi"].forEach((label) => trh.appendChild(el("th", {}, label)));
+  thead.appendChild(trh); table.appendChild(thead);
+
+  const tbody = el("tbody");
+  rows.forEach((r) => {
+    const tr = el("tr", { style: "cursor:pointer" });
+    tr.appendChild(el("td", {}, r.reviewer_id));
+    tr.appendChild(el("td", {}, r.arm.replace(/_/g, " ")));
+    tr.appendChild(el("td", { class: "num" }, pct(r.predicted_exam_accuracy, 1)));
+    tr.appendChild(el("td", { class: "num" }, pct(r.predicted_exam_accuracy_lo, 1)));
+    tr.appendChild(el("td", { class: "num" }, pct(r.predicted_exam_accuracy_hi, 1)));
+    tr.addEventListener("click", () => {
+      state.selectedReviewer = r.reviewer_id;
+      renderReviewerSelect();
+      renderTrajectory();
+      renderTrajTable();
+      document.getElementById("panelA").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
 }
 
 function renderRhoChart() {
   const svg = document.getElementById("rhoChart");
   svg.innerHTML = "";
+  defsInjected.delete(svg);
+  const defs = ensureDefs(svg);
+  addSoftShadowFilter(defs, "rhoDotShadow", "rgba(20,20,30,0.32)", 2, 1.5);
   const W = 460, H = 120, M = { l: 20, r: 20, t: 14, b: 30 };
   const plotW = W - M.l - M.r;
   const xMin = 0.75, xMax = 0.92;
@@ -425,7 +619,7 @@ function renderRhoChart() {
 
   DATA.self_validation.forEach((s) => {
     const x = xScale(s.rho);
-    const dot = svgEl("circle", { cx: x, cy: midY, r: 5, style: `fill:${color}`, stroke: cssVar("--surface-1"), "stroke-width": 2 });
+    const dot = svgEl("circle", { cx: x, cy: midY, r: 5.5, style: `fill:${color}`, stroke: cssVar("--surface-solid"), "stroke-width": 2, filter: "url(#rhoDotShadow)" });
     const hit = svgEl("circle", { cx: x, cy: midY, r: 14, fill: "transparent", style: "cursor:pointer" });
     hit.addEventListener("mouseenter", (e) => {
       const tt = document.createDocumentFragment();
@@ -454,9 +648,23 @@ function renderRhoSummary() {
 // ---------------------------------------------------------------------------
 // Panel D — cost account
 // ---------------------------------------------------------------------------
+function renderGroupGlossary() {
+  const wrap = document.getElementById("groupGlossary");
+  if (!wrap) return;
+  wrap.innerHTML = "";
+  DATA.cost_groups.forEach((g) => {
+    const item = el("div", { class: "gk-item" });
+    item.appendChild(el("b", {}, g.group + ":"));
+    item.appendChild(document.createTextNode(GROUP_DESC[g.group] || ""));
+    wrap.appendChild(item);
+  });
+}
+
 function renderCostChart() {
   const svg = document.getElementById("costChart");
   svg.innerHTML = "";
+  defsInjected.delete(svg);
+  const defs = ensureDefs(svg);
   const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 68 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
   const groups = DATA.cost_groups;
@@ -465,6 +673,8 @@ function renderCostChart() {
   const bandW = plotW / groups.length;
   const barW = Math.min(20, bandW / 3);
   const costColor = cssVar("--div-cost");
+  addSoftShadowFilter(defs, "costBarShadow", "rgba(20,10,10,0.3)", 2.5, 3);
+  const barGrad = addBarSheenGradient(defs, "costBarGrad", costColor, 0, M.t, 0, M.t + plotH);
 
   [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
     const y = M.t + (1 - f) * plotH;
@@ -481,7 +691,10 @@ function renderCostChart() {
       const v = g[key];
       const y = yScale(v);
       const h = M.t + plotH - y;
-      const rect = svgEl("rect", { x, y, width: barW, height: Math.max(h, 0), rx: 4, ry: 4, style: `fill:${color};opacity:${op}` });
+      const rect = svgEl("rect", {
+        x, y, width: barW, height: Math.max(h, 0), rx: 5, ry: 5,
+        style: `fill:${barGrad};opacity:${op}`, filter: "url(#costBarShadow)",
+      });
       rect.addEventListener("mouseenter", (e) => {
         const tt = document.createDocumentFragment();
         tt.appendChild(ttTitle(g.group));
@@ -509,6 +722,8 @@ function renderCostChart() {
 function renderBenefitChart() {
   const svg = document.getElementById("benefitChart");
   svg.innerHTML = "";
+  defsInjected.delete(svg);
+  const defs = ensureDefs(svg);
   const W = 460, H = 240, M = { l: 40, r: 10, t: 16, b: 68 };
   const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
   const groups = DATA.cost_groups;
@@ -517,6 +732,8 @@ function renderBenefitChart() {
   const bandW = plotW / groups.length;
   const barW = Math.min(28, bandW / 2);
   const color = cssVar("--div-benefit");
+  addSoftShadowFilter(defs, "benefitBarShadow", "rgba(10,15,25,0.3)", 2.5, 3);
+  const barGrad = addBarSheenGradient(defs, "benefitBarGrad", color, 0, M.t, 0, M.t + plotH);
 
   [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
     const y = M.t + (1 - f) * plotH;
@@ -532,7 +749,10 @@ function renderBenefitChart() {
     const v = g.skill_gain_units;
     const y = yScale(v);
     const h = M.t + plotH - y;
-    const rect = svgEl("rect", { x, y, width: barW, height: Math.max(h, 0), rx: 4, ry: 4, style: `fill:${color}` });
+    const rect = svgEl("rect", {
+      x, y, width: barW, height: Math.max(h, 0), rx: 6, ry: 6,
+      style: `fill:${barGrad}`, filter: "url(#benefitBarShadow)",
+    });
     rect.addEventListener("mouseenter", (e) => {
       const tt = document.createDocumentFragment();
       tt.appendChild(ttTitle(g.group));
@@ -612,15 +832,34 @@ function renderAll() {
   renderReviewerSelect();
   renderTrajLegend();
   renderTrajectory();
+  renderTrajTable();
+  renderStateGlossary();
   renderInterventionTable();
   renderD3Legend();
   renderD3Chart();
+  renderD3Table();
   renderRhoChart();
   renderRhoSummary();
+  renderGroupGlossary();
   renderCostChart();
   renderBenefitChart();
   renderCostTable();
 }
+
+// Chart/table view toggles for panels A and C. Self-contained -- no need to
+// route through renderAll(), since both the chart and table are always kept
+// up to date; this only flips which one is visible.
+document.querySelectorAll(".view-toggle").forEach((toggle) => {
+  const target = toggle.dataset.target; // "traj" or "d3"
+  toggle.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-view]");
+    if (!btn) return;
+    toggle.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+    const view = btn.dataset.view;
+    document.getElementById(`${target}ChartView`).style.display = view === "chart" ? "" : "none";
+    document.getElementById(`${target}TableView`).style.display = view === "table" ? "" : "none";
+  });
+});
 
 document.getElementById("themeToggle").addEventListener("click", () => {
   const root = document.documentElement;

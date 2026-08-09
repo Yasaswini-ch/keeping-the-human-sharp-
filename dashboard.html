@@ -7,15 +7,20 @@
 <style>
   :root {
     color-scheme: light;
-    --surface-1:      #fcfcfb;
-    --page:           #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --baseline:       #c3c2b7;
-    --border:         rgba(11,11,11,0.10);
-    --success-text:   #006300;
+    --page-0:         #eef0f3;
+    --page-1:         #f7f7f9;
+    --surface-1:      rgba(255,255,255,0.68);
+    --surface-2:      rgba(255,255,255,0.46);
+    --surface-solid:  #ffffff;
+    --text-primary:   #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-muted:     #86868b;
+    --gridline:       rgba(0,0,0,0.07);
+    --baseline:       rgba(0,0,0,0.18);
+    --border:         rgba(0,0,0,0.08);
+    --border-strong:  rgba(0,0,0,0.14);
+    --highlight:      rgba(255,255,255,0.9);
+    --success-text:   #1a7d1a;
 
     --series-1: #2a78d6; /* blind_first */
     --series-2: #eb6834; /* control_always_ai */
@@ -29,140 +34,303 @@
 
     --div-cost:    #e34948;
     --div-benefit: #2a78d6;
+
+    --blur: 24px;
+    --r-lg: 22px;
+    --r-md: 16px;
+    --r-sm: 11px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --shadow-1: 0 1px 1px rgba(20,20,25,0.03), 0 2px 6px rgba(20,20,25,0.04);
+    --shadow-2: 0 1px 2px rgba(20,20,25,0.04), 0 10px 24px -8px rgba(20,20,25,0.10), 0 24px 48px -16px rgba(20,20,25,0.10);
+    --shadow-3: 0 2px 4px rgba(20,20,25,0.05), 0 18px 40px -12px rgba(20,20,25,0.16), 0 32px 64px -20px rgba(20,20,25,0.14);
+    --glow-ring: inset 0 1px 0 var(--highlight), inset 0 0 0 1px rgba(0,0,0,0.04);
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
       color-scheme: dark;
-      --surface-1:      #1a1a19;
-      --page:           #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --baseline:       #383835;
+      --page-0:         #000000;
+      --page-1:         #0a0a0c;
+      --surface-1:      rgba(32,32,36,0.62);
+      --surface-2:      rgba(44,44,48,0.50);
+      --surface-solid:  #1c1c1e;
+      --text-primary:   #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-muted:     #7c7c82;
+      --gridline:       rgba(255,255,255,0.08);
+      --baseline:       rgba(255,255,255,0.22);
       --border:         rgba(255,255,255,0.10);
-      --success-text:   #0ca30c;
+      --border-strong:  rgba(255,255,255,0.16);
+      --highlight:      rgba(255,255,255,0.10);
+      --success-text:   #37d637;
       --series-1: #3987e5;
-      --series-2: #d95926;
-      --series-3: #199e70;
-      --series-4: #c98500;
-      --div-cost:    #e66767;
+      --series-2: #ff8a4c;
+      --series-3: #23d18f;
+      --series-4: #ffb703;
+      --div-cost:    #ff6b6b;
       --div-benefit: #3987e5;
+      --shadow-1: 0 1px 1px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.35);
+      --shadow-2: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px -8px rgba(0,0,0,0.55), 0 24px 56px -16px rgba(0,0,0,0.5);
+      --shadow-3: 0 2px 4px rgba(0,0,0,0.45), 0 20px 48px -12px rgba(0,0,0,0.65), 0 36px 72px -20px rgba(0,0,0,0.55);
+      --glow-ring: inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.05);
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --surface-1:      #1a1a19;
-    --page:           #0d0d0d;
-    --text-primary:   #ffffff;
-    --text-secondary: #c3c2b7;
-    --text-muted:     #898781;
-    --gridline:       #2c2c2a;
-    --baseline:       #383835;
-    --border:         rgba(255,255,255,0.10);
-    --success-text:   #0ca30c;
-    --series-1: #3987e5;
-    --series-2: #d95926;
-    --series-3: #199e70;
-    --series-4: #c98500;
-    --div-cost:    #e66767;
-    --div-benefit: #3987e5;
+    --page-0: #000000; --page-1: #0a0a0c;
+    --surface-1: rgba(32,32,36,0.62); --surface-2: rgba(44,44,48,0.50); --surface-solid: #1c1c1e;
+    --text-primary: #f5f5f7; --text-secondary: #a1a1a6; --text-muted: #7c7c82;
+    --gridline: rgba(255,255,255,0.08); --baseline: rgba(255,255,255,0.22);
+    --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.16);
+    --highlight: rgba(255,255,255,0.10); --success-text: #37d637;
+    --series-1: #3987e5; --series-2: #ff8a4c; --series-3: #23d18f; --series-4: #ffb703;
+    --div-cost: #ff6b6b; --div-benefit: #3987e5;
+    --shadow-1: 0 1px 1px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.35);
+    --shadow-2: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px -8px rgba(0,0,0,0.55), 0 24px 56px -16px rgba(0,0,0,0.5);
+    --shadow-3: 0 2px 4px rgba(0,0,0,0.45), 0 20px 48px -12px rgba(0,0,0,0.65), 0 36px 72px -20px rgba(0,0,0,0.55);
+    --glow-ring: inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.05);
   }
-  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page-0: #eef0f3; --page-1: #f7f7f9;
+    --surface-1: rgba(255,255,255,0.68); --surface-2: rgba(255,255,255,0.46); --surface-solid: #ffffff;
+    --text-primary: #1d1d1f; --text-secondary: #6e6e73; --text-muted: #86868b;
+    --gridline: rgba(0,0,0,0.07); --baseline: rgba(0,0,0,0.18);
+    --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.14);
+    --highlight: rgba(255,255,255,0.9); --success-text: #1a7d1a;
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+    --div-cost: #e34948; --div-benefit: #2a78d6;
+    --shadow-1: 0 1px 1px rgba(20,20,25,0.03), 0 2px 6px rgba(20,20,25,0.04);
+    --shadow-2: 0 1px 2px rgba(20,20,25,0.04), 0 10px 24px -8px rgba(20,20,25,0.10), 0 24px 48px -16px rgba(20,20,25,0.10);
+    --shadow-3: 0 2px 4px rgba(20,20,25,0.05), 0 18px 40px -12px rgba(20,20,25,0.16), 0 32px 64px -20px rgba(20,20,25,0.14);
+    --glow-ring: inset 0 1px 0 var(--highlight), inset 0 0 0 1px rgba(0,0,0,0.04);
+  }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    background: var(--page);
+    background:
+      radial-gradient(1100px 620px at 8% -8%, color-mix(in srgb, var(--series-1) 16%, transparent), transparent 60%),
+      radial-gradient(900px 560px at 108% 10%, color-mix(in srgb, var(--series-3) 13%, transparent), transparent 60%),
+      radial-gradient(1000px 700px at 50% 118%, color-mix(in srgb, var(--series-4) 10%, transparent), transparent 55%),
+      linear-gradient(180deg, var(--page-1), var(--page-0) 60%);
+    background-attachment: fixed;
     color: var(--text-primary);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: -apple-system, system-ui, "SF Pro Display", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     font-size: 15px;
     line-height: 1.5;
   }
-  .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 24px 80px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 100px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); background-clip: padding-box; }
 
-  header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
-  h1 { font-size: 22px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 96px; }
+
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: no-preference) {
+    header.top, .stat-row, .filter-row, section.panel {
+      animation: riseIn .6s var(--ease) both;
+    }
+    .stat-row { animation-delay: .04s; }
+    .filter-row { animation-delay: .08s; }
+    section.panel:nth-of-type(1) { animation-delay: .12s; }
+    section.panel:nth-of-type(2) { animation-delay: .16s; }
+    section.panel:nth-of-type(3) { animation-delay: .20s; }
+    section.panel:nth-of-type(4) { animation-delay: .24s; }
+    section.panel:nth-of-type(5) { animation-delay: .28s; }
+    section.panel:nth-of-type(6) { animation-delay: .32s; }
+  }
+
+  header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 26px; }
+  h1 {
+    font-size: 27px; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.025em;
+    background: linear-gradient(135deg, var(--text-primary) 40%, color-mix(in srgb, var(--series-1) 65%, var(--text-primary)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .subtitle { color: var(--text-secondary); font-size: 13.5px; max-width: 70ch; }
   .theme-toggle {
-    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
-    border-radius: 7px; padding: 7px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--border); background: var(--surface-1); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    color: var(--text-secondary); box-shadow: var(--shadow-1), var(--glow-ring);
+    border-radius: 100px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease), color .2s ease;
   }
-  .theme-toggle:hover { color: var(--text-primary); }
+  .theme-toggle:hover { color: var(--text-primary); transform: translateY(-1px); box-shadow: var(--shadow-2), var(--glow-ring); }
+  .theme-toggle:active { transform: translateY(0) scale(.96); }
 
-  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px;
-    background: var(--gridline); border: 1px solid var(--gridline); border-radius: 10px; overflow: hidden; margin-bottom: 22px; }
-  .stat { background: var(--surface-1); padding: 14px 16px; }
-  .stat .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; }
-  .stat .value { font-size: 22px; font-weight: 650; }
-  .stat .sub { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat {
+    position: relative; overflow: hidden;
+    background: var(--surface-1); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border-radius: var(--r-md); padding: 18px 18px 16px;
+    box-shadow: var(--shadow-2), var(--glow-ring);
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  .stat:hover { transform: translateY(-3px); box-shadow: var(--shadow-3), var(--glow-ring); }
+  .stat::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--series-1), var(--series-3) 50%, var(--series-4));
+    opacity: .8;
+  }
+  .stat .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+  .stat .value {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+    background: linear-gradient(135deg, var(--text-primary), color-mix(in srgb, var(--text-primary) 70%, var(--series-1)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat .sub { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
 
-  .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; padding: 12px 16px;
-    background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 10px; margin-bottom: 24px; }
-  .filter-group { display: flex; align-items: center; gap: 8px; }
-  .filter-group .fg-label { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-right: 2px; }
+  .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 14px 18px;
+    background: var(--surface-1); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border-radius: var(--r-md); margin-bottom: 26px; box-shadow: var(--shadow-2), var(--glow-ring); }
+  .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .filter-group .fg-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 2px; font-weight: 700; }
   .toggle-btn {
-    border: 1px solid var(--gridline); background: transparent; color: var(--text-secondary);
-    border-radius: 100px; padding: 5px 12px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary);
+    border-radius: 100px; padding: 6px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
   }
-  .toggle-btn .sw { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .5; }
-  .toggle-btn.active { border-color: transparent; color: #fff; font-weight: 600; }
-  .toggle-btn.active .sw { opacity: 1; background: #fff; }
+  .toggle-btn:hover { transform: translateY(-1px); border-color: var(--border-strong); }
+  .toggle-btn:active { transform: translateY(0) scale(.95); }
+  .toggle-btn .sw { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .5; box-shadow: 0 0 0 0 transparent; }
+  .toggle-btn.active {
+    border-color: transparent; color: #fff; font-weight: 700;
+    box-shadow: var(--shadow-1), 0 6px 16px -4px color-mix(in srgb, var(--_tint, var(--series-1)) 55%, transparent);
+  }
+  .toggle-btn.active .sw { opacity: 1; background: #fff; box-shadow: 0 0 8px 1px rgba(255,255,255,0.7); }
   select.plain {
-    border: 1px solid var(--gridline); background: var(--surface-1); color: var(--text-primary);
-    border-radius: 7px; padding: 6px 10px; font-size: 12.5px;
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary);
+    border-radius: var(--r-sm); padding: 7px 12px; font-size: 12.5px; font-weight: 500; cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease;
   }
+  select.plain:hover { border-color: var(--border-strong); }
+  select.plain:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--series-1) 35%, transparent); }
 
-  section.panel { background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 12px;
-    padding: 20px 22px 22px; margin-bottom: 24px; }
+  section.panel {
+    position: relative;
+    background: var(--surface-1); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border-radius: var(--r-lg); padding: 24px 26px 26px; margin-bottom: 26px;
+    box-shadow: var(--shadow-2), var(--glow-ring);
+    transition: box-shadow .4s var(--ease);
+  }
+  section.panel:hover { box-shadow: var(--shadow-3), var(--glow-ring); }
   .panel-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; margin-bottom: 4px; }
-  h2 { font-size: 16.5px; font-weight: 650; margin: 0; }
-  .panel-note { font-size: 12.5px; color: var(--text-muted); max-width: 62ch; margin: 4px 0 14px; }
+  h2 { font-size: 17.5px; font-weight: 750; margin: 0; letter-spacing: -0.015em; }
+  .panel-note { font-size: 12.5px; color: var(--text-muted); max-width: 62ch; margin: 6px 0 16px; line-height: 1.6; }
 
   svg { display: block; overflow: visible; }
-  .axis-label { fill: var(--text-muted); font-size: 10.5px; }
+  .axis-label { fill: var(--text-muted); font-size: 10.5px; font-variant-numeric: tabular-nums; }
   .gridline { stroke: var(--gridline); stroke-width: 1; }
   .baseline { stroke: var(--baseline); stroke-width: 1; }
 
   .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 10px 0 2px; }
   .legend-item { display: flex; align-items: center; gap: 6px; }
-  .legend-key { width: 14px; height: 2px; border-radius: 2px; }
-  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .legend-key { width: 14px; height: 3px; border-radius: 3px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
 
   .tooltip {
-    position: fixed; pointer-events: none; z-index: 50; background: var(--surface-1); color: var(--text-primary);
-    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.18); opacity: 0; transition: opacity .08s ease; max-width: 280px;
+    position: fixed; pointer-events: none; z-index: 50; background: var(--surface-solid); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px; font-size: 12px;
+    box-shadow: var(--shadow-3); opacity: 0; transform: translateY(4px) scale(.98);
+    transition: opacity .15s var(--ease), transform .15s var(--ease); max-width: 280px;
   }
-  .tooltip.show { opacity: 1; }
-  .tooltip .tt-title { font-weight: 650; margin-bottom: 3px; }
-  .tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; }
-  .tooltip .tt-row .v { font-weight: 650; font-variant-numeric: tabular-nums; }
+  .tooltip.show { opacity: 1; transform: translateY(0) scale(1); }
+  .tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; padding: 1px 0; }
+  .tooltip .tt-row .v { font-weight: 700; font-variant-numeric: tabular-nums; }
   .tooltip .tt-key { display:inline-block; width:9px; height:2px; border-radius:2px; margin-right:5px; vertical-align:middle; }
 
   table.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  table.data-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em;
-    color: var(--text-muted); font-weight: 650; padding: 8px 10px; border-bottom: 1px solid var(--gridline);
-    cursor: pointer; white-space: nowrap; user-select: none; }
+  table.data-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); font-weight: 700; padding: 10px 12px; border-bottom: 1px solid var(--gridline);
+    cursor: pointer; white-space: nowrap; user-select: none; transition: color .2s ease; }
   table.data-table th:hover { color: var(--text-primary); }
+  table.data-table th.sorted { color: var(--series-1); }
   table.data-table th.sorted::after { content: attr(data-arrow); margin-left: 4px; }
-  table.data-table td { padding: 7px 10px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
+  table.data-table td { padding: 8px 12px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
   table.data-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .table-wrap { overflow-x: auto; margin-top: 12px; max-height: 420px; overflow-y: auto; border: 1px solid var(--gridline); border-radius: 8px; }
-  table.data-table thead th { position: sticky; top: 0; background: var(--surface-1); }
+  table.data-table tbody tr { transition: background .15s ease; }
+  table.data-table tbody tr:hover td { background: var(--surface-2); }
+  .table-wrap { overflow-x: auto; margin-top: 14px; max-height: 420px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-1); }
+  table.data-table thead th { position: sticky; top: 0; background: var(--surface-solid); z-index: 1; }
 
-  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
-    padding: 3px 8px; border-radius: 100px; white-space: nowrap; }
-  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 100px; white-space: nowrap; box-shadow: var(--shadow-1); }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 4px 0 currentColor; }
   .detail-toggle { font-size: 11px; color: var(--text-muted); cursor: pointer; text-decoration: underline dotted; }
-  .detail-row td { background: var(--page); font-size: 12px; color: var(--text-secondary); }
+  .detail-row td { background: var(--surface-2); font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
   @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
-  .col-head { font-size: 12.5px; font-weight: 650; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
-  .col-head .sw { width: 10px; height: 10px; border-radius: 3px; }
+  .col-head { font-size: 12.5px; font-weight: 750; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+  .col-head .sw { width: 10px; height: 10px; border-radius: 3px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
 
-  footer.foot { color: var(--text-muted); font-size: 11.5px; margin-top: 8px; text-align: center; }
+  footer.foot { color: var(--text-muted); font-size: 11.5px; margin-top: 12px; text-align: center; }
+
+  /* ---------- Plain-language onboarding ---------- */
+  .hero {
+    background: var(--surface-1); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border-radius: var(--r-lg); padding: 26px 28px 28px; margin-bottom: 26px; box-shadow: var(--shadow-2), var(--glow-ring);
+  }
+  .hero-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--series-1); margin-bottom: 8px; }
+  .hero h2 { font-size: 19px; margin: 0 0 10px; letter-spacing: -0.015em; }
+  .hero p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; max-width: 76ch; margin: 0 0 10px; }
+  .hero p:last-of-type { margin-bottom: 16px; }
+  .hero-table { width: 100%; max-width: 640px; border-collapse: collapse; font-size: 12.5px; margin-top: 4px; }
+  .hero-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; padding: 6px 12px 6px 0; }
+  .hero-table td { padding: 7px 12px 7px 0; border-top: 1px solid var(--gridline); font-variant-numeric: tabular-nums; }
+  .hero-table td.hi { color: var(--div-cost); font-weight: 700; }
+  .hero-table td.lo { color: var(--success-text); font-weight: 700; }
+  .hero-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; }
+
+  /* ---------- Section heading with plain-English title + internal tag ---------- */
+  .panel-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-muted);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 3px 9px;
+  }
+
+  /* ---------- Inline glossary "i" icons ---------- */
+  .info-icon {
+    display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px;
+    border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted);
+    font-size: 10px; font-weight: 700; font-style: normal; cursor: help; vertical-align: middle; margin: 0 1px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .info-icon:hover { background: var(--series-1); color: #fff; border-color: transparent; }
+
+  /* ---------- Compact glossary key (state badges, group labels) ---------- */
+  .glossary-key { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 12px; color: var(--text-secondary); margin: 4px 0 16px; }
+  .glossary-key .gk-item { display: flex; align-items: baseline; gap: 6px; }
+  .glossary-key .gk-item b { color: var(--text-primary); font-weight: 700; }
+
+  /* ---------- Real-world check callout ---------- */
+  .realworld-badge {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--success-text);
+    background: color-mix(in srgb, var(--status-good) 14%, transparent);
+    border-radius: 100px; padding: 4px 11px; margin-bottom: 10px;
+  }
+  .realworld-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .rw-stats { display: flex; flex-wrap: wrap; gap: 28px; margin: 14px 0 6px; }
+  .rw-stat .rw-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+  .rw-stat .rw-value { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .rw-stat .rw-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .rw-verdict {
+    margin-top: 16px; padding: 12px 16px; border-radius: var(--r-sm); font-size: 12.5px; line-height: 1.6;
+    background: var(--surface-2); border-left: 3px solid var(--status-warning); color: var(--text-secondary);
+  }
+
+  /* ---------- Chart / table view toggle ---------- */
+  .view-toggle { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 2px; gap: 2px; flex-shrink: 0; }
+  .view-toggle button {
+    border: none; background: transparent; color: var(--text-secondary); font-size: 11.5px; font-weight: 650;
+    padding: 5px 13px; border-radius: 100px; cursor: pointer; transition: background .25s var(--ease), color .25s var(--ease);
+  }
+  .view-toggle button.active { background: var(--series-1); color: #fff; box-shadow: var(--shadow-1); }
 </style>
 </head>
 <body>
@@ -171,38 +339,111 @@
   <header class="top">
     <div>
       <h1>PS-I5 — Reviewer Capability &amp; Intervention Dashboard</h1>
-      <div class="subtitle">Reads only from pipeline outputs (handoff_table.csv, D3, self-validation seeds, B.2 intervention policy, D4 cost account) — never the raw 36,000-event log directly. Real dataset, seed 20260806.</div>
+      <div class="subtitle">Reads only from pipeline outputs — never the raw 36,000-event log directly. Real dataset, seed 20260806.</div>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button">Toggle theme</button>
   </header>
+
+  <section class="hero">
+    <div class="hero-kicker">Start here</div>
+    <h2>Reviewers who work with an AI assistant look completely fine — until the AI is taken away</h2>
+    <p>
+      Every reviewer here spent 24 weeks judging cases with AI help. If you only look at
+      normal metrics — accuracy, throughput, how often they agreed with the AI — every arm
+      of the study looks equally healthy, 84–87% accurate the whole way through. Nothing
+      looks wrong.
+    </p>
+    <p>
+      Then, in week 25, the AI was taken away and everyone was tested on their own. The
+      real picture — real skill, quietly built up or eroded by <em>how</em> each reviewer
+      used the AI for those 24 weeks — was hiding underneath the whole time:
+    </p>
+    <table class="hero-table">
+      <thead><tr><th>How reviewers used the AI</th><th>Looked like, week 1–24</th><th>Really was, week 25 (AI removed)</th></tr></thead>
+      <tbody>
+        <tr><td>Always shown the AI's answer</td><td>86.6% accurate</td><td class="hi">60.9% accurate</td></tr>
+        <tr><td>AI hidden on some cases</td><td>84.1% accurate</td><td>69.7% accurate</td></tr>
+        <tr><td>Prompted to double-check the AI</td><td>87.3% accurate</td><td>80.0% accurate</td></tr>
+        <tr><td>Had to judge before seeing the AI</td><td>87.1% accurate</td><td class="lo">81.7% accurate</td></tr>
+      </tbody>
+    </table>
+    <div class="hero-note">
+      Same starting accuracy, wildly different real skill six months later — and the
+      first column gave no warning. Everything below is this dashboard's attempt to
+      recover that hidden second column <em>without</em> ever taking the AI away, using
+      only the kind of log any real deployment already collects.
+    </div>
+  </section>
 
   <div class="stat-row" id="statRow"></div>
 
   <div class="filter-row" id="filterRow"></div>
 
   <section class="panel" id="panelA">
-    <div class="panel-head"><h2>Capability trajectory</h2>
-      <select class="plain" id="reviewerSelect"></select>
+    <div class="panel-head">
+      <div class="panel-title"><h2>How each reviewer's real skill has moved, week by week</h2><span class="tag">full trajectory · feeds D1</span></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <select class="plain" id="reviewerSelect"></select>
+        <div class="view-toggle" id="trajViewToggle" data-target="traj">
+          <button type="button" data-view="chart" class="active">Chart</button>
+          <button type="button" data-view="table">Table</button>
+        </div>
+      </div>
     </div>
-    <div class="panel-note">Logit ability scale. Bold line + shaded band = selected reviewer's smoothed capability_estimate and 95% interval. Thin lines = every other reviewer matching the current filter, colored by arm, for context.</div>
-    <div id="trajLegend" class="legend"></div>
-    <svg id="trajChart" width="100%" height="320" viewBox="0 0 980 320" preserveAspectRatio="xMinYMin meet"></svg>
+    <div class="panel-note">
+      Pick a reviewer below. The bold line is our best estimate of their real skill each week —
+      not a raw score, a <span class="info-icon" data-tip="This is on a 'logit' scale: a relative skill score, not a percentage. 0 means an average reviewer. Positive is above average, negative is below — like a credit score, only the comparisons mean anything, not the raw number by itself.">i</span>
+      <b>relative</b> one where 0 is an average reviewer, positive is above, negative is below.
+      The shaded band around it is a <span class="info-icon" data-tip="We're 95% confident the reviewer's true skill that week is somewhere in this band. A wider band means less evidence was available that week, not that the reviewer did worse.">i</span>
+      <b>95% confidence range</b> — wider means less evidence that week, not worse performance.
+      Thin background lines are every other reviewer matching your filter, so you can see how one person compares to their peers.
+    </div>
+    <div id="trajChartView">
+      <div id="trajLegend" class="legend"></div>
+      <svg id="trajChart" width="100%" height="320" viewBox="0 0 980 320" preserveAspectRatio="xMinYMin meet"></svg>
+    </div>
+    <div id="trajTableView" class="table-wrap" style="display:none;"><table class="data-table" id="trajTable"></table></div>
   </section>
 
   <section class="panel" id="panelB">
-    <div class="panel-head"><h2>B.2 — Intervention assignments</h2></div>
-    <div class="panel-note">Who got flagged, what intervention, and why. Click a column header to sort; click a row to expand the full intervention detail and stop condition.</div>
+    <div class="panel-head"><div class="panel-title"><h2>Who needs help, and why</h2><span class="tag">intervention plan · D2</span></div></div>
+    <div class="panel-note">
+      Every reviewer, sorted by <span class="info-icon" data-tip="0 to 3. It's a simple count of how many warning signs are currently triggered for this reviewer: declining skill trend, an uncertain (wide) estimate, leaning on the AI heavily right now, and — handled separately — being under-reliant. Higher = more attention needed.">i</span>
+      <b>risk score</b> (how many warning signs are currently flagged). Click a column header to sort;
+      click a row to see the full plan in plain language.
+    </div>
+    <div class="glossary-key" id="stateGlossary"></div>
     <div class="table-wrap"><table class="data-table" id="interventionTable"></table></div>
   </section>
 
   <section class="panel" id="panelC">
-    <div class="panel-head"><h2>D3 — Predicted week-25 unassisted accuracy</h2></div>
-    <div class="panel-note">All 60 reviewers, sorted descending, colored by arm, whisker = 95% interval. Self-validation: full-pipeline rank correlation (predicted vs. true exam accuracy) across 5 independently generated seeds — this is the number that stands in for accuracy, since the real dataset has no answer key.</div>
-    <div id="d3Legend" class="legend"></div>
-    <svg id="d3Chart" width="100%" height="280" viewBox="0 0 980 280" preserveAspectRatio="xMinYMin meet"></svg>
+    <div class="panel-head">
+      <div class="panel-title"><h2>What happens if the AI disappears next week</h2><span class="tag">forecast · D3</span></div>
+      <div class="view-toggle" id="d3ViewToggle" data-target="d3">
+        <button type="button" data-view="chart" class="active">Chart</button>
+        <button type="button" data-view="table">Table</button>
+      </div>
+    </div>
+    <div class="panel-note">
+      All 60 reviewers, sorted best to worst. Each dot is our best guess at how accurate that
+      reviewer would be tested completely unassisted next week; the whisker is the 95% confidence
+      range around it. Click a dot to see that reviewer's full history above.
+    </div>
+    <div id="d3ChartView">
+      <div id="d3Legend" class="legend"></div>
+      <svg id="d3Chart" width="100%" height="280" viewBox="0 0 980 280" preserveAspectRatio="xMinYMin meet"></svg>
+    </div>
+    <div id="d3TableView" class="table-wrap" style="display:none;"><table class="data-table" id="d3Table"></table></div>
     <div class="two-col" style="margin-top:18px;">
       <div>
-        <div class="col-head">Self-validation ρ across seeds</div>
+        <div class="col-head">How do we know this forecast is trustworthy?</div>
+        <div class="panel-note" style="margin:0 0 10px;">
+          The real dataset has no answer key to check against, so we tested the whole method
+          blind on 5 other datasets we generated ourselves (where we <em>do</em> know the true
+          answer) and checked how well our predicted ranking matched reality. Each dot below is
+          one of those tests.
+          <span class="info-icon" data-tip="Spearman's rank correlation (rho): a score from -1 to 1 measuring how well our predicted order of reviewers (best to worst) matches the true order. 1.0 = perfect match, 0 = no better than random, -1 = exactly backwards. 0.86 is a strong match.">i</span>
+        </div>
         <svg id="rhoChart" width="100%" height="120" viewBox="0 0 460 120" preserveAspectRatio="xMinYMin meet"></svg>
       </div>
       <div>
@@ -213,8 +454,15 @@
   </section>
 
   <section class="panel" id="panelD">
-    <div class="panel-head"><h2>D4 — Cost account: two sides of the trade</h2></div>
-    <div class="panel-note">Grouped by reliance-class / risk tier. The two panels below are never combined into one score — cost (cases made worse) and benefit (skill preserved) are different units measured on different axes, shown side by side by design.</div>
+    <div class="panel-head"><div class="panel-title"><h2>What it costs to fix this, and what you get back</h2><span class="tag">cost / benefit · D4</span></div></div>
+    <div class="panel-note">
+      Forcing a reviewer to work without AI help on some cases has a real, immediate cost: some
+      cases that the AI would've gotten right now go wrong. In exchange, the reviewer practices
+      and keeps their independent skill sharp. These two things are measured in different units
+      (case counts vs. a skill score) and are <b>never combined into one number</b> here on purpose —
+      see them side by side, not netted against each other.
+    </div>
+    <div class="glossary-key" id="groupGlossary"></div>
     <div class="two-col">
       <div>
         <div class="col-head"><span class="sw" style="background:var(--div-cost)"></span>Cost side — cases affected</div>
@@ -222,11 +470,104 @@
         <div id="costLegend" class="legend"></div>
       </div>
       <div>
-        <div class="col-head"><span class="sw" style="background:var(--div-benefit)"></span>Benefit side — skill-gain units</div>
+        <div class="col-head"><span class="sw" style="background:var(--div-benefit)"></span>Benefit side — skill-gain units
+          <span class="info-icon" data-tip="An abstract score for 'how much independent practice this group gets, converted to a skill benefit.' Not a percentage — only useful for comparing groups against each other. The exam-accuracy-gain estimate on hover is the more concrete version of the same number.">i</span>
+        </div>
         <svg id="benefitChart" width="100%" height="240" viewBox="0 0 460 240" preserveAspectRatio="xMinYMin meet"></svg>
       </div>
     </div>
     <div class="table-wrap" style="margin-top:16px;"><table class="data-table" id="costTable"></table></div>
+  </section>
+
+  <section class="panel" id="panelE">
+    <div class="realworld-badge"><span class="dot"></span>Real chest x-rays, not just simulation</div>
+    <div class="panel-title"><h2>Does the difficulty proxy generalize to real medical images?</h2><span class="tag">external validation · A.4-stretch</span></div>
+    <div class="panel-note" style="margin-bottom:0;">
+      D4's cost/benefit numbers rely on the A.4 difficulty proxy — the idea that low AI
+      confidence signals a harder case. That was built and validated on the synthetic
+      dataset's single binary AI decision per case. Separately, the same idea was tested on
+      <b>300 real, labeled NIH ChestX-ray14 images</b>, scored by a frozen, pre-existing public
+      model (nothing was trained here) — a genuinely different, multi-label task.
+    </div>
+    <div class="rw-stats">
+      <div class="rw-stat"><div class="rw-label">Real images tested</div><div class="rw-value">300</div><div class="rw-sub">NIH ChestX-ray14, real labels</div></div>
+      <div class="rw-stat"><div class="rw-label">Low confidence ↔ AI was wrong</div><div class="rw-value">ρ = +0.31</div><div class="rw-sub">holds up — same direction as synthetic (+0.21)</div></div>
+      <div class="rw-stat"><div class="rw-label">Low confidence ↔ case complexity</div><div class="rw-value">ρ = −0.41</div><div class="rw-sub">inverted — synthetic found +0.08</div></div>
+      <div class="rw-stat"><div class="rw-label">Binary triage accuracy on this sample</div><div class="rw-value">48.3%</div><div class="rw-sub">chance level — the clue to why</div></div>
+    </div>
+    <div class="panel-note" style="margin: 14px 0 6px;">
+      <b>Why it inverts — the model used (torchxrayvision's <code>densenet121-res224-nih</code>,
+      frozen, nothing trained here) almost always fires on <em>something</em>:</b>
+    </div>
+    <table class="hero-table">
+      <thead><tr><th>Ground truth</th><th>n in sample</th><th>Model called it "abnormal"</th></tr></thead>
+      <tbody>
+        <tr><td>True No-Finding</td><td>160</td><td class="hi">150 (93.8%)</td></tr>
+        <tr><td>True Abnormal</td><td>140</td><td>135 (96.4%)</td></tr>
+      </tbody>
+    </table>
+    <div class="panel-note" style="margin: 8px 0 0;">
+      Calling "abnormal" on 93.8% of genuinely normal images means the binary triage accuracy on
+      this sample is 48.3% — chance. "Confidence" here is <code>max(probability)</code> across 14
+      disease channels: one huge, unambiguous finding can dominate that max even when the overall
+      case has several marginal comorbid findings alongside it — a reduction artifact from
+      collapsing a multi-label problem into one number, not a failure of the underlying model.
+    </div>
+    <div class="rw-verdict">
+      <b>Honest read:</b> the narrow claim — a low-confidence prediction is more likely a wrong
+      one — survives the move to real data. The broader claim the proxy was built for —
+      that confidence-based clustering recovers case <em>complexity</em> — does not, and inverts
+      with strong significance (p=2×10⁻¹³). This doesn't invalidate the synthetic-dataset
+      validation D4 relies on; it means the method shouldn't be assumed to carry over
+      unmodified to a genuinely multi-label deployment without redesigning how "confidence" is
+      computed. Full writeup, tier-proportion comparison, and methodology:
+      <a href="A4_STRETCH_CHESTXRAY14.md" style="color:var(--series-1); font-weight:600;">A4_STRETCH_CHESTXRAY14.md</a>.
+    </div>
+  </section>
+
+  <section class="panel" id="panelF">
+    <div class="realworld-badge"><span class="dot"></span>Real people, not just simulation</div>
+    <div class="panel-title"><h2>Does this actually work outside the dataset?</h2><span class="tag">live experiment · B.4</span></div>
+    <div class="panel-note" style="margin-bottom:0;">
+      Everything above — including the cost/benefit trade in D4 — is a simulation of what the B.2
+      intervention policy would do, run against a synthetic log. Separately, the actual hypothesis
+      behind it (periodic unassisted practice preserves more real skill than constant AI assistance)
+      was tested on <b>59 real people</b>, split into two groups, across three independently run task
+      variants. Group A saw AI help on every training item; Group B had it periodically withheld —
+      the same idea as the B.2 policy. Both groups were then tested completely unassisted.
+    </div>
+    <div class="rw-stats">
+      <div class="rw-stat"><div class="rw-label">Participants</div><div class="rw-value">59</div><div class="rw-sub">30 continuous-AI · 29 periodic-blind</div></div>
+      <div class="rw-stat"><div class="rw-label">Continuous-AI group, unassisted accuracy</div><div class="rw-value">49.8%</div><div class="rw-sub">essentially chance (50%)</div></div>
+      <div class="rw-stat"><div class="rw-label">Periodic-blind group, unassisted accuracy</div><div class="rw-value">55.0%</div><div class="rw-sub">+5.2 points higher</div></div>
+      <div class="rw-stat"><div class="rw-label">Statistical significance</div><div class="rw-value">p = 0.45</div><div class="rw-sub">not significant at this sample size</div></div>
+    </div>
+    <div class="panel-note" style="margin: 14px 0 6px;"><b>Broken down by source — this is 3 independently run task variants pooled, not one clean sample:</b></div>
+    <table class="hero-table">
+      <thead><tr><th>Source</th><th>n (A / B)</th><th>Mean unassisted accuracy (A / B)</th><th>p-value</th></tr></thead>
+      <tbody>
+        <tr><td><code>gk_study</code></td><td>23 / 24</td><td>53.0% / 57.1%</td><td>0.554</td></tr>
+        <tr><td><code>PS-I5 B.4</code> + <code>Myth-or-Fact</code> (item-level)</td><td>7 / 5</td><td>39.3% / 45.0%</td><td>0.866</td></tr>
+        <tr><td><b>Pooled (all sources)</b></td><td><b>30 / 29</b></td><td><b>49.8% / 55.0%</b></td><td class="hi"><b>0.448</b></td></tr>
+      </tbody>
+    </table>
+    <div class="panel-note" style="margin: 8px 0 0;">
+      Worth naming plainly: every <code>gk_study</code> p-value dropped substantially as that source
+      grew from 31 to 47 participants (0.825→0.554) — moving <em>toward</em> significance, not away,
+      while the effect's direction held. That's consistent with a real, small, underpowered effect —
+      but exactly as consistent with noise from a handful of correlated data batches. 59 isn't enough
+      to tell those apart, and this shouldn't be read as "getting close."
+    </div>
+    <div class="rw-verdict">
+      <b>Honest read:</b> the periodic-blind group did better in <em>every</em> slice of the data (each
+      task variant alone, pooled, with or without low-effort participants excluded) — the direction
+      the intervention hypothesis predicts. But at n=59, none of it clears conventional statistical
+      significance. This is not evidence the intervention works, and not evidence it doesn't — a real,
+      honestly-reported null result, which the underlying research plan explicitly said should outweigh
+      a simulated positive. Full protocol and data-quality handling (duplicates, chance-rate
+      corrections, low-effort flagging):
+      <a href="B4_LIVE_EXPERIMENT_REPORT.md" style="color:var(--series-1); font-weight:600;">B4_LIVE_EXPERIMENT_REPORT.md</a>.
+    </div>
   </section>
 
   <footer class="foot">PS-I5 · keeping-the-human-sharp · generated from pipeline outputs, not raw event data</footer>
