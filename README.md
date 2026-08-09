@@ -170,16 +170,59 @@ true exam accuracy, across 5 independently-generated seeds — see
 
 [`dashboard.html`](dashboard.html) is the single-page view of everything above — reads
 only the packaged deliverables (`handoff_table.csv`, D2, D3, self-validation seeds,
-`D4_cost_account.csv`), never the raw event log or `out/` intermediates directly. Four
-panels, filterable by arm/domain: capability trajectories with interval bands, D2
-intervention assignments, D3 predictions plus the self-validation ρ distribution, and
-the D4 cost/benefit shown as two genuinely separate charts (grouped by reliance-class ×
-risk-tier, not risk-tier alone — otherwise a HIGH-risk over-reliant reviewer's real cost
-gets averaged together with a HIGH-risk under-reliant reviewer's zero cost into one
-misleading row). Plain HTML + hand-rolled SVG (no CDN dependency, works offline).
-Data is prepared by `build_dashboard_data.py` → `dashboard_data.js`; rerun
+`D4_cost_account.csv`), never the raw event log or `out/` intermediates directly. Plain
+HTML + hand-rolled SVG (no CDN dependency, no build step, works offline).
+
+### How to run it
+
+```bash
+python -m http.server 8000
+# then open http://localhost:8000/dashboard.html
+```
+
+Opening `dashboard.html` directly as a `file://` URL mostly works too, but some browsers
+block local script loading that way — the one-line server above sidesteps that entirely
+and is the reliable option. Nothing else needs to be running; it's a static page.
+
+### How to use it
+
+- **Start at the top.** The hero card states the whole problem in plain language before
+  any chart loads — read that first if you're new to the project, everything below is
+  built to answer the question it poses.
+- **Arm / domain filters** (top of the page) scope every panel below them at once — the
+  numbers always agree across panels because they're reading the same filtered slice.
+- **Hover anything** — a chart mark, a table row, a small circled **ⓘ** next to a
+  technical term — for a plain-language tooltip. The ⓘ icons specifically exist so you
+  never have to guess what "risk score" or "logit scale" means; hover it right where it
+  appears.
+- **Chart ⇄ Table toggle** (top-right of the trajectory and forecast panels) swaps
+  between the visual and the underlying rows — useful if a chart is hard to read, or you
+  just want the exact numbers.
+- **Click a dot or row** in the D3 forecast panel to jump straight to that reviewer's
+  full 24-week trajectory in the panel above, with a smooth scroll into view.
+- **Click a table row** in the intervention-assignments panel to expand the full
+  plan — detail text, frequency, and stop condition — for that reviewer.
+- **Toggle theme** (top-right button) switches light/dark; both are fully designed, not
+  an automatic invert.
+
+### What's on the page
+
+Six panels, in order: capability trajectories with interval bands (feeds D1); D2
+intervention assignments with a plain-language glossary of each state; D3 predictions
+plus the self-validation ρ distribution across 5 seeds; D4 cost/benefit shown as two
+genuinely separate charts, grouped by reliance-class × risk-tier (not risk-tier alone —
+otherwise a HIGH-risk over-reliant reviewer's real cost gets averaged together with a
+HIGH-risk under-reliant reviewer's zero cost into one misleading row); then two panels
+visually flagged with a green "real, not simulated" badge — the A.4-stretch check
+against 300 real NIH chest x-rays, and the B.4 live experiment against 59 real
+participants — each with its actual evidence (confusion matrix, per-source breakdown)
+shown inline, not just linked out.
+
+### Keeping it in sync
+
+Data is prepared by `build_dashboard_data.py` → `dashboard_data.js`. Rerun
 `package_deliverables.py` then `build_dashboard_data.py` after any pipeline stage
-changes to refresh the dashboard.
+changes, so the dashboard never drifts from the packaged D1–D4 files it reads.
 
 ---
 
