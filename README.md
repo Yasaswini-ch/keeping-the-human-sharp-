@@ -20,27 +20,82 @@ tells you it's there.
 
 ---
 
-## Quickstart
+## Setup
+
+Everything you need to go from "nothing on my machine" to "the dashboard is open in my
+browser," in order. No prior context assumed.
+
+### 1. Get the code
+
+If you don't already have the repo locally:
 
 ```bash
-pip install -r requirements.txt   # core deps; A.4-stretch needs its own (see below)
+git clone https://github.com/Yasaswini-ch/keeping-the-human-sharp-.git
+cd keeping-the-human-sharp-/ps_i5_skill_atrophy
 ```
 
-The dataset is already generated and committed (`public/`, `answer_key/`) — you don't
-need to run `generate.py` unless you want to regenerate it or produce a fresh seed for
-your own validation (see [Reproducing / regenerating](#reproducing--regenerating) below).
+(If you downloaded a ZIP from GitHub instead of using `git clone`, unzip it and `cd`
+into the extracted `ps_i5_skill_atrophy` folder — same result.) Every command below
+assumes your terminal's current directory is this folder — check with `pwd` (Mac/Linux/Git
+Bash) or `cd` with no arguments (Windows Command Prompt/PowerShell); it should end in
+`ps_i5_skill_atrophy`.
 
-**To see the results without running anything:** open [`dashboard.html`](dashboard.html)
-via a local server (opening it directly as `file://` mostly works, but some browsers
-block local script loading — a one-line server sidesteps that):
+### 2. Check you have Python
+
+```bash
+python --version
+```
+
+Need Python 3.8+. If that command isn't found, try `python3 --version` instead — on
+Mac/Linux the command is often `python3`, not `python` (swap it into every command below
+if so). No Python installed at all: get it from [python.org](https://www.python.org/downloads/)
+first, then come back here.
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+(Use `pip3` instead of `pip` if step 2 needed `python3`.) This installs the core deps
+only — everything except the dashboard needs these. The dashboard itself needs **no
+Python dependencies at all** (see step 4). A.4-stretch has its own heavier, optional
+ML dependencies — see [its row in requirements.txt](requirements.txt), not needed for
+anything else in this repo.
+
+### 4. Run the dashboard
+
+This is a static HTML page — no Python packages required, just a local web server so
+the browser will load its JavaScript files (opening it by double-clicking, i.e. a
+`file://` URL, mostly works too, but some browsers silently block local script loading
+that way — the server below sidesteps that completely and is the reliable option):
 
 ```bash
 python -m http.server 8000
-# then open http://localhost:8000/dashboard.html
 ```
 
-**To run the full pipeline from scratch:** see [Pipeline, in order](#pipeline-in-order) below —
-each stage's script is idempotent and reads only the outputs of the stages before it.
+Leave that running (it'll sit there printing nothing, that's normal — it's serving
+requests), then open this in your browser:
+
+```
+http://localhost:8000/dashboard.html
+```
+
+**To stop the server:** go back to the terminal and press `Ctrl+C`.
+**If port 8000 is already taken** (you'll see an "Address already in use" error):
+run `python -m http.server 8001` instead (any free port number works), and open
+`http://localhost:8001/dashboard.html` to match.
+
+The dataset the dashboard reads from (`public/`, `answer_key/`, and every packaged
+`D1`–`D4` file) is already generated and committed to the repo — nothing else needs to
+run first. See [How to use it](#how-to-use-it) below for what's actually on the page.
+
+### 5. (Optional) Run the full analysis pipeline from scratch
+
+Only needed if you want to regenerate the packaged deliverables yourself, not just view
+them. See [Pipeline, in order](#pipeline-in-order) below — each stage's script is
+idempotent and reads only the outputs of the stages before it, so you can run them in
+sequence with no other setup beyond steps 1–3 above.
 
 ---
 
@@ -173,16 +228,8 @@ only the packaged deliverables (`handoff_table.csv`, D2, D3, self-validation see
 `D4_cost_account.csv`), never the raw event log or `out/` intermediates directly. Plain
 HTML + hand-rolled SVG (no CDN dependency, no build step, works offline).
 
-### How to run it
-
-```bash
-python -m http.server 8000
-# then open http://localhost:8000/dashboard.html
-```
-
-Opening `dashboard.html` directly as a `file://` URL mostly works too, but some browsers
-block local script loading that way — the one-line server above sidesteps that entirely
-and is the reliable option. Nothing else needs to be running; it's a static page.
+**How to run it:** see [Setup](#setup) above (step 4) — a one-line local server, no
+Python dependencies needed for the dashboard itself.
 
 ### How to use it
 
